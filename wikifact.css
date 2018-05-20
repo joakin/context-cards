@@ -154,6 +154,7 @@ body.demoPage {
     height: 20px;
     width: 100px;
     background-repeat: no-repeat;
+    background-position: left center;
 }
 
 .demoPage .mwe-popups .mwe-popups-extract {
