@@ -1,3 +1,5 @@
+import parseHTML from "../ui/parseHTML";
+
 /**
  * Prepare extract
  * @param {Object} page Rest response
@@ -6,5 +8,5 @@
 export function parseHTMLResponse(page) {
   const extract = page.extract_html;
 
-  return extract.length === 0 ? [] : $.parseHTML(extract);
+  return extract.length === 0 ? [] : parseHTML(extract);
 }

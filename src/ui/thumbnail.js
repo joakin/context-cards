@@ -5,16 +5,15 @@ import bracketedDevicePixelRatio from "./bracketedDevicePixelRatio";
  */
 
 const SIZES = {
-    portraitImage: {
-      h: 250, // Exact height
-      w: 203 // Max width
-    },
-    landscapeImage: {
-      h: 200, // Max height
-      w: 320 // Exact Width
-    }
+  portraitImage: {
+    h: 250, // Exact height
+    w: 203 // Max width
   },
-  $ = jQuery;
+  landscapeImage: {
+    h: 200, // Max height
+    w: 320 // Exact Width
+  }
+};
 
 export { SIZES };
 

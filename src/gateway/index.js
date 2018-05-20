@@ -2,8 +2,6 @@ import constants from "../constants";
 import createRESTBaseGateway from "./rest";
 import * as formatters from "./restFormatters";
 
-const $ = jQuery;
-
 // Note that this interface definition is in the global scope.
 /**
  * The interface implemented by all preview gateways.
@@ -34,10 +32,5 @@ export default function createGateway(lang) {
     endpoint: `https://${lang}.wikipedia.org/api/rest_v1/page/summary/`,
     url: title => `https://${lang}.wikipedia.org/wiki/${title}`
   });
-  console.log($.ajax);
-  return createRESTBaseGateway(
-    $.ajax,
-    restConfig,
-    formatters.parseHTMLResponse
-  );
+  return createRESTBaseGateway(restConfig, formatters.parseHTMLResponse);
 }

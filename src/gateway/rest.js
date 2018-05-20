@@ -3,9 +3,9 @@
  */
 
 import { createModel, createNullModel } from "../preview/model";
+import deepExtend from "../deepExtend";
 
-const RESTBASE_PROFILE = "https://www.mediawiki.org/wiki/Specs/Summary/1.2.0",
-  $ = jQuery;
+const RESTBASE_PROFILE = "https://www.mediawiki.org/wiki/Specs/Summary/1.2.0";
 
 /**
  * @interface RESTBaseGateway
@@ -22,14 +22,13 @@ const RESTBASE_PROFILE = "https://www.mediawiki.org/wiki/Specs/Summary/1.2.0",
  *
  * [0]: https://en.wikipedia.org/api/rest_v1/#!/Page_content/get_page_summary_title
  *
- * @param {Function} ajax A function with the same signature as `jQuery.ajax`
  * @param {Object} config Configuration that affects the major behavior of the
  *  gateway.
  * @param {Function} extractParser A function that takes response and returns
  *  parsed extract
  * @return {RESTBaseGateway}
  */
-export default function createRESTBaseGateway(ajax, config, extractParser) {
+export default function createRESTBaseGateway(config, extractParser) {
   /**
    * Fetches page data from [the RESTBase page summary endpoint][0].
    *
@@ -43,7 +42,7 @@ export default function createRESTBaseGateway(ajax, config, extractParser) {
   function fetch(title) {
     const endpoint = config.endpoint;
 
-    return ajax({
+    return $.ajax({
       url: endpoint + encodeURIComponent(title),
       headers: {
         Accept: `application/json; charset=utf-8; profile="${RESTBASE_PROFILE}"`
@@ -57,7 +56,7 @@ export default function createRESTBaseGateway(ajax, config, extractParser) {
         page => {
           // Endpoint response may be empty or simply missing a title.
           if (!page || !page.title) {
-            page = $.extend(true, page || {}, { title });
+            page = deepExtend(page || {}, { title });
           }
           // And extract may be omitted if empty string
           if (page.extract === undefined) {

@@ -8,6 +8,7 @@ import { SIZES, createThumbnail } from "./thumbnail";
 import { previewTypes } from "../preview/model";
 import { renderPreview } from "./templates/preview/preview";
 import { renderPagePreview } from "./templates/pagePreview/pagePreview";
+import parseHTML from "./parseHTML";
 
 const landscapePopupWidth = 450,
   portraitPopupWidth = 320,
@@ -144,14 +145,6 @@ export function createPreviewWithType(model) {
   }
 }
 
-function parseHTML(str) {
-  const tmp = document.implementation.createHTMLDocument();
-  tmp.body.innerHTML = str;
-  return tmp.body.children.length === 1
-    ? tmp.body.children[0]
-    : tmp.body.children;
-}
-
 /**
  * Creates an instance of the DTO backing a preview.
  *
@@ -171,7 +164,10 @@ export function createPagePreview(model) {
   }
   if (extract) {
     const extractEl = el.querySelector(".mwe-popups-extract");
-    extractEl && extract.forEach(e => extractEl.appendChild(e));
+    if (extractEl) {
+      if (extract.forEach) extract.forEach(e => extractEl.appendChild(e));
+      else extractEl.appendChild(extract);
+    }
   }
 
   return {
