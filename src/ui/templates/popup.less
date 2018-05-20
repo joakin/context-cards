@@ -1,0 +1,296 @@
+@import '../variables.less';
+@import '../mixins.less';
+
+// Code adapted from Yair Rand's NavPopupsRestyled.js
+// https://en.wikipedia.org/wiki/User:Yair_rand/NavPopupsRestyled.js
+//
+// "Tall" terminology, although applied to the popup, refers only to the
+// thumbnail and not the popup itself:
+//   Class     Thumbnail  Popup
+//   Tall      Portrait   Landscape
+//   Not tall  Landscape  Portrait
+//   Not tall  Missing    Landscape
+
+.mwe-popups {
+	background: #fff;
+	position: absolute;
+	z-index: @zIndexPopup;
+	.box-shadow( 0 30px 90px -20px rgba( 0, 0, 0, 0.3 ), 0 0 1px @colorGray10; );
+	padding: 0;
+	display: none;
+	font-size: 14px;
+	line-height: @lineHeight;
+	min-width: 300px;
+	border-radius: @borderRadius;
+
+	.mw-ui-icon {
+		// mw-ui-icon assumes a font size of 16px so we must declare it here
+		font-size: 16px;
+		margin: 21px 0 8px 0;
+	}
+
+	.mwe-popups-container {
+		color: @colorText;
+		margin-top: -9px;
+		padding-top: 9px;
+		text-decoration: none;
+
+		footer {
+			padding: @popupPadding;
+			margin: 0;
+			font-size: 10px;
+			position: absolute;
+			bottom: 0;
+			left: 0;
+		}
+	}
+
+	.mwe-popups-extract {
+		// T156800, T139297: "Pad" the extract horizontally using a margin so the
+		// SVG element is forced not to occlude the truncating pseudo-element and
+		// the settings cog in IE9-11.
+		margin: @popupPadding;
+
+		display: block;
+		color: @colorText;
+		text-decoration: none;
+		position: relative;
+
+		&:hover {
+			text-decoration: none;
+		}
+
+		&:after {
+			content: ' ';
+			position: absolute;
+			bottom: 0;
+			width: 25%;
+			height: @lineHeight;
+			background-color: transparent;
+		}
+
+		/* Stylelint rule broken for vendor prefixes: https://github.com/stylelint/stylelint/issues/1939 */
+		/* stylelint-disable function-linear-gradient-no-nonstandard-direction */
+		&[ dir='ltr' ]:after {
+			/* @noflip */
+			right: 0;
+			/* @noflip */
+			background-image: -webkit-linear-gradient( to right, rgba( 255, 255, 255, 0 ), rgba( 255, 255, 255, 1 ) 50% );
+			/* @noflip */
+			background-image: -moz-linear-gradient( to right, rgba( 255, 255, 255, 0 ), rgba( 255, 255, 255, 1 ) 50% );
+			/* @noflip */
+			background-image: -o-linear-gradient( to right, rgba( 255, 255, 255, 0 ), rgba( 255, 255, 255, 1 ) 50% );
+			/* @noflip */
+			background-image: linear-gradient( to right, rgba( 255, 255, 255, 0 ), rgba( 255, 255, 255, 1 ) 50% );
+		}
+
+		&[ dir='rtl' ]:after {
+			/* @noflip */
+			left: 0;
+			/* @noflip */
+			background-image: -webkit-linear-gradient( to left, rgba( 255, 255, 255, 0 ), rgba( 255, 255, 255, 1 ) 50% );
+			/* @noflip */
+			background-image: -moz-linear-gradient( to left, rgba( 255, 255, 255, 0 ), rgba( 255, 255, 255, 1 ) 50% );
+			/* @noflip */
+			background-image: -o-linear-gradient( to left, rgba( 255, 255, 255, 0 ), rgba( 255, 255, 255, 1 ) 50% );
+			/* @noflip */
+			background-image: linear-gradient( to left, rgba( 255, 255, 255, 0 ), rgba( 255, 255, 255, 1 ) 50% );
+		}
+		/* stylelint-enable function-linear-gradient-no-nonstandard-direction */
+
+		// Make the text fit in exactly as many lines as we want.
+		p {
+			margin: 0;
+		}
+		ul,
+		ol,
+		li,
+		dl,
+		dd,
+		dt {
+			margin-top: 0;
+			margin-bottom: 0;
+		}
+	}
+
+	svg {
+		overflow: hidden;
+	}
+
+	&.mwe-popups-is-tall {
+		width: 450px;
+
+		> div > a > svg {
+			vertical-align: middle;
+		}
+
+		.mwe-popups-extract {
+			width: @popupTallWidth;
+			height: 9 * @lineHeight;
+			overflow: hidden;
+			float: left;
+		}
+
+		footer {
+			width: @popupTallWidth;
+			left: 0;
+		}
+	}
+
+	&.mwe-popups-is-not-tall {
+		width: @popupWidth;
+
+		.mwe-popups-extract {
+			@minHeight: 2 * @lineHeight;
+			// On short summaries, we want to avoid an overlap with the gradient.
+			min-height: @minHeight;
+			max-height: 7 * @lineHeight;
+			overflow: hidden;
+			margin-bottom: @minHeight + 7px;
+			padding-bottom: 0;
+		}
+
+		footer {
+			width: @popupWidth - @cogIconSize;
+		}
+	}
+
+	&.mwe-popups-type-generic,
+	&.mwe-popups-type-disambiguation {
+		.mwe-popups-extract {
+			min-height: auto;
+			padding-top: 4px;
+			margin-bottom: 60px;
+			margin-top: 0;
+		}
+
+		.mwe-popups-read-link {
+			font-weight: bold;
+			font-size: 12px;
+		}
+
+		// When the user dwells on the "There was an issue displaying this preview"
+		// text, which is a link to the page, then highlight the "Go to this page"
+		// link too.
+		.mwe-popups-extract:hover + footer .mwe-popups-read-link {
+			text-decoration: underline;
+		}
+	}
+
+	/* Triangles/Pointers */
+	&.mwe-popups-no-image-pointer {
+		&:before {
+			.mwe-popups-border-pointer-top( 8px, 10px, @colorGray10, 0px );
+		}
+
+		&:after {
+			.mwe-popups-border-pointer-top( 7px, 7px, #fff, 4px );
+		}
+	}
+
+	&.flipped-x.mwe-popups-no-image-pointer {
+		&:before {
+			left: auto;
+			right: 10px;
+		}
+
+		&:after {
+			left: auto;
+			right: 7px;
+		}
+	}
+
+	&.mwe-popups-image-pointer {
+		&:before {
+			.mwe-popups-border-pointer-top( 9px, 9px, @colorGray10, 0px );
+			z-index: @zIndexBackground;
+		}
+
+		&:after {
+			.mwe-popups-border-pointer-top( 8px, 6px, #fff, 4px );
+			z-index: @zIndexForeground;
+		}
+
+		&.flipped-x {
+			&:before {
+				.mwe-popups-border-pointer-top( 9px, 273px, @colorGray10, 0px );
+			}
+
+			&:after {
+				.mwe-popups-border-pointer-top( 8px, 269px, #fff, 4px );
+			}
+		}
+
+		.mwe-popups-extract {
+			padding-top: 32px;
+			margin-top: 190px;
+		}
+
+		> div > a > svg {
+			margin-top: -8px;
+			position: absolute;
+			z-index: @zIndexThumbnailMask;
+			left: 0;
+		}
+	}
+
+	&.flipped-x.mwe-popups-is-tall {
+		min-height: 242px;
+
+		&:before {
+			.mwe-popups-border-pointer-top( 9px, 420px, @colorGray10, 0px );
+			z-index: @zIndexBackground;
+		}
+
+		> div > a > svg {
+			margin: 0;
+			margin-top: -8px;
+			margin-bottom: -7px;
+			position: absolute;
+			z-index: @zIndexThumbnailMask;
+			right: 0;
+		}
+	}
+
+	&.flipped-x-y {
+		&:before {
+			.mwe-popups-border-pointer-bottom( 9px, 272px, @colorGray10, 0px );
+			z-index: @zIndexBackground;
+		}
+
+		&:after {
+			.mwe-popups-border-pointer-bottom( 8px, 269px, #fff, 4px );
+			z-index: @zIndexForeground;
+		}
+
+		&.mwe-popups-is-tall {
+			min-height: 242px;
+
+			&:before {
+				.mwe-popups-border-pointer-bottom( 9px, 420px, @colorGray10, 0px );
+			}
+
+			&:after {
+				.mwe-popups-border-pointer-bottom( 8px, 417px, #fff, 4px );
+			}
+
+			> div > a > svg {
+				margin: 0;
+				margin-bottom: -9px;
+				position: absolute;
+				z-index: @zIndexThumbnailMask;
+				right: 0;
+			}
+		}
+	}
+
+	&.flipped-y {
+		&:before {
+			.mwe-popups-border-pointer-bottom( 8px, 10px, @colorGray10, 0px );
+		}
+
+		&:after {
+			.mwe-popups-border-pointer-bottom( 7px, 7px, #fff, 4px );
+		}
+	}
+}
