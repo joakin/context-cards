@@ -40,13 +40,41 @@ export default function createRESTBaseGateway(config, extractParser) {
    * @return {jQuery.Promise}
    */
   function fetch(title) {
-    const endpoint = config.endpoint;
+    return new Promise((resolve, reject) => {
+      const endpoint = config.endpoint;
+      const url = endpoint + encodeURIComponent(title);
 
-    return $.ajax({
-      url: endpoint + encodeURIComponent(title),
-      headers: {
-        Accept: `application/json; charset=utf-8; profile="${RESTBASE_PROFILE}"`
-      }
+      var request = new XMLHttpRequest();
+      request.open("GET", url, true);
+      request.setRequestHeader(
+        "Accept",
+        `application/json; charset=utf-8; profile="${RESTBASE_PROFILE}"`
+      );
+
+      request.onload = function() {
+        if (request.status >= 200 && request.status < 400) {
+          // Success!
+          var resp = request.responseText;
+          try {
+            resolve(JSON.parse(resp));
+          } catch (e) {
+            reject(new Error("Failed to parse JSON"));
+          }
+        } else {
+          const error = new Error("Failed to parse JSON");
+          error.request = request;
+          reject(error);
+        }
+      };
+
+      request.onerror = function() {
+        // There was a connection error of some sort
+        const error = new Error("Request Error");
+        error.request = request;
+        reject(error);
+      };
+
+      request.send();
     });
   }
 
@@ -71,20 +99,16 @@ export default function createRESTBaseGateway(config, extractParser) {
             )
           );
         },
-        (jqXHR, textStatus, errorThrown) => {
+        error => {
           // Adapt the response to the ideal API.
           // TODO: should we just let the client handle this too?
-          if (jqXHR.status === 404) {
+          if (error.request.status === 404) {
             resolve(createNullModel(title, config.url(title)));
           } else {
             // The client will choose how to handle these errors which may
             // include those due to HTTP 5xx status. The rejection typing
             // matches Fetch failures.
-            reject("http", {
-              xhr: jqXHR,
-              textStatus,
-              exception: errorThrown
-            });
+            reject(error);
           }
         }
       );
@@ -92,7 +116,6 @@ export default function createRESTBaseGateway(config, extractParser) {
   }
 
   return {
-    fetch,
     getPageSummary
   };
 }
