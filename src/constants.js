@@ -14,11 +14,6 @@ export default {
   // * https://phabricator.wikimedia.org/T70861#3129780
   FETCH_START_DELAY: 150, // ms.
 
-  // The minimum time a preview must be open before we judge it
-  // has been seen.
-  // See https://phabricator.wikimedia.org/T184793
-  PREVIEW_SEEN_DURATION: 1000, // ms
-
   // The delay after which a FETCH_COMPLETE action should be dispatched.
   //
   // If the API endpoint responds faster than 500 ms (or, say, the API

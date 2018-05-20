@@ -1,7 +1,12 @@
 import "./ui/index.less";
 import createGateway from "./gateway";
 import { init, render } from "./ui/renderer";
-import { ABANDON_END_DELAY } from "./constants";
+import {
+  FETCH_COMPLETE_TARGET_DELAY,
+  FETCH_START_DELAY,
+  ABANDON_END_DELAY
+} from "./constants";
+import wait from "./wait";
 
 const linkSelector = "a[data-wiki-title]";
 
@@ -12,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let preview = null;
 
   function onAbandon(oldUI) {
-    if (preview.ui() === oldUI) preview = null;
+    if ((preview && preview.ui()) === oldUI) preview = null;
   }
 
   document.querySelectorAll(linkSelector).forEach(link => {
@@ -24,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (preview && link === preview.link()) {
         preview.mouseenter(event);
       } else {
-        preview && preview.mouseout();
+        preview && preview.die();
         preview = createPreviewState(link, title, lang, onAbandon);
         preview.load(event);
       }
@@ -43,6 +48,13 @@ function createPreviewState(link, title, lang, onAbandon) {
   let preview = null;
   let onLimbo = false;
   let limboTimeout = null;
+  let ded = false;
+
+  function die() {
+    preview.hide();
+    ded = true;
+    onAbandon(preview);
+  }
 
   function previewBehavior() {
     return {
@@ -56,8 +68,7 @@ function createPreviewState(link, title, lang, onAbandon) {
         onLimbo = true;
         setTimeout(() => {
           if (onLimbo && preview) {
-            preview.hide();
-            onAbandon(preview);
+            die();
           }
         }, ABANDON_END_DELAY);
       },
@@ -73,13 +84,27 @@ function createPreviewState(link, title, lang, onAbandon) {
     mouseout(e) {
       previewBehavior().previewAbandon();
     },
+    die() {
+      die();
+    },
     link() {
       return link;
     },
     load(event) {
-      return gateway.getPageSummary(title).then(response => {
-        preview = render(response);
-        preview.show(event, previewBehavior(), "token");
+      const request = wait(FETCH_START_DELAY).then(
+        _ =>
+          !ded
+            ? gateway.getPageSummary(title).then(response => {
+                preview = render(response);
+              })
+            : null
+      );
+
+      return Promise.all([
+        request,
+        wait(FETCH_COMPLETE_TARGET_DELAY - FETCH_START_DELAY)
+      ]).then(() => {
+        if (!ded) preview.show(event, previewBehavior(), "token");
       });
     },
     ui() {
