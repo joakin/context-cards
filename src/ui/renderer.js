@@ -226,8 +226,8 @@ export function createDisambiguationPreview(model) {
 function offset(el) {
   var rect = el.getBoundingClientRect();
   return {
-    top: rect.top + document.body.scrollTop,
-    left: rect.left + document.body.scrollLeft
+    top: rect.top + window.scrollY,
+    left: rect.left + window.scrollX
   };
 }
 
@@ -264,7 +264,7 @@ export function show(preview, event, link, behavior, token, container, dir) {
       height: link.offsetHeight
     },
     {
-      scrollTop: document.body.scrollTop,
+      scrollTop: window.scrollY,
       width: window.innerWidth,
       height: window.innerHeight
     },
@@ -274,6 +274,9 @@ export function show(preview, event, link, behavior, token, container, dir) {
 
   container.appendChild(preview.el);
 
+  // Show the element before querying offsetHeight on flippedY previews (otherwise it is 0)
+  preview.el.style.display = "block";
+
   layoutPreview(
     preview,
     layout,
@@ -281,8 +284,6 @@ export function show(preview, event, link, behavior, token, container, dir) {
     SIZES.landscapeImage.h,
     pointerSize
   );
-
-  preview.el.style.display = "block";
 
   return wait(200)
     .then(() => {
@@ -513,8 +514,7 @@ export function layoutPreview(
   predefinedLandscapeImageHeight,
   pointerSize
 ) {
-  const popup = preview.el,
-    isTall = preview.isTall,
+  const isTall = preview.isTall,
     hasThumbnail = preview.hasThumbnail,
     thumbnail = preview.thumbnail,
     flippedY = layout.flippedY;
@@ -526,18 +526,18 @@ export function layoutPreview(
     hasThumbnail &&
     thumbnail.height < predefinedLandscapeImageHeight
   ) {
-    const extract = popup.querySelector(".mwe-popups-extract");
+    const extract = preview.el.querySelector(".mwe-popups-extract");
     extract.style.marginTop = `${thumbnail.height - pointerSize}px`;
   }
 
-  classes.forEach(cls => popup.classList.add(cls));
+  classes.forEach(cls => preview.el.classList.add(cls));
 
   if (flippedY) {
-    offsetTop -= outerHeight(popup);
+    offsetTop -= outerHeight(preview.el);
   }
 
-  popup.style.top = `${offsetTop}px`;
-  popup.style.left = `${layout.offset.left}px`;
+  preview.el.style.top = `${offsetTop}px`;
+  preview.el.style.left = `${layout.offset.left}px`;
 
   if (hasThumbnail) {
     setThumbnailClipPath(preview, layout);
