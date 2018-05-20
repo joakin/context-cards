@@ -1,0 +1,9 @@
+
+<!-- saved from url=(0070)https://a4621041136.cdn.optimizely.com/client_storage/a4621041136.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script>
+
+var allowedOrigins = [["bbc.co.uk", "i"], ["topgear\\.com", ""], ["bbc.co.uk", ""], ["http\\:\\/\\/wwverticals\\-dev\\.bbc\\.com", ""], ["http\\:\\/\\/www\\.test\\.bbc\\.com", ""]];
+var blockedOrigins = [];
+
+!function(){"use strict";function e(e){return!g||0!==e.indexOf(g.origin)}function r(e,r){return new RegExp(r[0],r[1]).test(e)}function i(e){if(!s){s=e?e.toString():"Localstorage is undefined";var r={id:"iframeerror",type:"ERROR",response:"Error accessing localStorage: "+s};event.source.postMessage(JSON.stringify(r),event.origin)}}function n(r){g&&e(r.key)&&g.source.postMessage(JSON.stringify({type:"SYNC",response:{key:r.key,value:r.newValue}}),g.origin)}var t,o,s;try{t=window.localStorage}catch(a){o=a}var g,f="_",c=function(n){var s,a,c,d,u,l=!1;for(u=0;u<allowedOrigins.length;u++)if(r(n.origin,allowedOrigins[u])){l=!0;break}if(l)for(u=0;u<blockedOrigins.length;u++)if(r(n.origin,blockedOrigins[u])){l=!1;break}if(l){g=n;try{s=JSON.parse(n.data)}catch(y){return}if(c=n.origin+f+s.key,!t)return i(o);if("GET"===s.type)a=t.getItem(c);else if("PUT"===s.type)try{a=t.setItem(c,s.value)}catch(y){return i(y)}else{if("GETALL"!==s.type)return;a={};for(var p in t)t.hasOwnProperty(p)&&e(p)&&(a[p]=t.getItem(p))}"undefined"!=typeof s.id&&(d={id:s.id,response:a},n.source.postMessage(JSON.stringify(d),n.origin))}};window.addEventListener("message",c,!0),window.addEventListener("storage",n,!0)}();
+</script></head><body></body></html>
