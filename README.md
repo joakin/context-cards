@@ -8,7 +8,7 @@ Get Wikipedia page previews on any page. Live examples at
 Include the library in your page:
 
 ```
-https://unpkg.com/context-cards@1.0.0/dist/bundle.js
+https://unpkg.com/context-cards/dist/bundle.js
 ```
 
 Mark some links with `data-wiki-title` and `data-wiki-lang`.
