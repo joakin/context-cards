@@ -1,0 +1,32 @@
+body {
+    font-family: "Charis SIL";
+    padding: 0;
+    margin: 0;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+h1 {
+    font-weight: bolder;
+    font-size: 32px;
+    line-height: 35px;
+    margin-top: 40px;
+}
+
+header {
+    background: black;
+    height: 80px;
+}
+
+.pflogo {
+    background-image: url(pitchfork-logo-bw.png);
+    background-repeat: no-repeat;
+    display: inline-block;
+    width: 120px;
+    height: 80px;
+    background-size: 120px;
+    background-position: left center;
+}

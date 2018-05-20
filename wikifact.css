@@ -1,0 +1,157 @@
+
+
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Lato, "Oxygen-Sans", Ubuntu, Cantarell, "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+}
+
+body.demoPage {
+    max-width: 980px;
+    margin: 0 auto;
+    margin-top: 40px;
+    background: #F2F4F7;
+}
+
+.demoPage a {
+    color: #36c;
+    text-decoration: none;
+}
+
+
+       a.wikiPreview {
+           border-bottom: 1px dotted #ccc;
+           color: #000 !important;
+           margin-right: 2px;
+           text-decoration: none !important;
+       }
+    
+       a.wikiPreview:after {
+           content: " ";
+           height: 16px;
+           width: 16px;
+           position: relative;
+           right: -3px;
+           top: 2px;
+           
+           background-image: url('bolt.svg');
+           background-repeat: no-repeat;
+           background-size: 10px 15px;
+           
+           display: inline-block;
+           
+       }
+    
+
+.demoPage .container {
+    background: #fff;
+    padding: 40px 60px;
+    border-radius: 2px;
+    box-shadow: 0px 2px 2px rgba(0,0,0,0.1);
+    padding-top: 60px;
+    padding-bottom: 100px;
+}
+
+.wikiFactBrand {
+    display: inline-block;
+    background-image: url(wikifact-header-branding.svg);
+    background-repeat: no-repeat;
+    text-indent: -9999px;
+    width: 300px;
+    height: 80px;
+    background-size: 300px;
+}
+
+.demoPage p {
+    line-height: 150%;
+    
+}
+
+.demoPage p.lead {
+    font-size: 120%;
+    font-weight: 300;
+}
+
+.demoPage h1.wikiTitle {
+    font-family: "Charter";
+    font-size: 28px;
+    font-weight: bolder;
+    font-style: italic;
+}
+
+.pubTiles {
+    margin: 0;
+    padding: 0;
+}
+
+.pubTiles::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.pubTiles li {
+    float: left;
+    list-style: none;
+    margin-right: 2%;
+    width: 23%;
+    
+}
+.pubTiles li a {
+    display: block;
+    height: 100px;
+    
+    text-indent: -9999px;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    
+}
+.pubTiles li a:hover {
+    box-shadow: 0px 10px 20px rgba(0,0,0,0.1);
+        -webkit-transition: box-shadow 0.3s; /* Safari */
+
+}
+.pubTiles li.bbc a {
+    background-image: url(bbc-logo.svg);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100px;
+}
+
+.pubTiles li.natgeo a {
+    background-image: url(natgeo-logo.svg);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 120px;
+}
+
+.pubTiles li.pitchfork a {
+    background-image: url(pitchfork-logo.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 120px;
+}
+.pubTiles li.cnn a {
+    background-image: url(cnn-logo.jpg);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 70px;
+}
+
+
+.bbcPage .mwe-popups .mwe-popups-extract {
+    font-size: 8px !important;
+    
+}
+
+.mwe-popups .mwe-popups-extract {
+    padding-top: 10px !important;
+}
+.mwe-popups .mwe-popups-extract:before {
+    content: " ";
+    background-image: url(wikifact-branding.svg);
+    background-size: 80px;
+    display: inline-block;
+    height: 20px;
+    width: 100px;
+    background-repeat: no-repeat;
+}
