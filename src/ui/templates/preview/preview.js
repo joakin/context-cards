@@ -25,11 +25,11 @@ export function renderPreview(
 		<div class='mwe-popups-container'>
 			<div class='mw-ui-icon mw-ui-icon-element mw-ui-icon-preview-${type}'></div>
 			${showTitle ? `<strong class='mwe-popups-title'>${title}</strong>` : ""}
-			<a href='${url}' class='mwe-popups-extract'>
+			<a href='${url}' class='mwe-popups-extract' target='_blank'>
 					<span class='mwe-popups-message'>${extractMsg}</span>
 			</a>
 			<footer>
-				<a href='${url}' class='mwe-popups-read-link'>${linkMsg}</a>
+				<a href='${url}' class='mwe-popups-read-link' target='_blank'>${linkMsg}</a>
 			</footer>
 		</div>
 	</div>
