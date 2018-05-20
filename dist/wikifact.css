@@ -19,7 +19,7 @@ body.demoPage {
 
 
        a.wikiPreview {
-           border-bottom: 1px dotted #ccc;
+           border-bottom: 1px dotted #666;
            color: #000 !important;
            margin-right: 2px;
            text-decoration: none !important;
@@ -154,4 +154,23 @@ body.demoPage {
     height: 20px;
     width: 100px;
     background-repeat: no-repeat;
+}
+
+.demoPage .mwe-popups .mwe-popups-extract {
+    font-size: 15px;
+    line-height: 15px;
+    
+}
+
+.natgeoPage .mwe-popups a.mwe-popups-extract,
+.natgeoPage .mwe-popups a.mwe-popups-extract:visited,
+.natgeoPage .mwe-popups a.mwe-popups-extract:active {
+    border-bottom: 0px solid transparent !important;
+}
+
+.footnote {
+    font-size: 12px;
+    color: #999;
+    margin-top: 20px;
+    
 }
