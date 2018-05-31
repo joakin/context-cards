@@ -10,38 +10,40 @@ import wait from "./wait";
 
 const linkSelector = "a[data-wiki-title]";
 
-// Init the renderer
-init();
+if (typeof window.Promise === "function") {
+  document.addEventListener("DOMContentLoaded", () => {
+    let preview = null;
 
-document.addEventListener("DOMContentLoaded", () => {
-  let preview = null;
+    // Init the renderer
+    init();
 
-  function onAbandon(oldUI) {
-    if ((preview && preview.ui()) === oldUI) preview = null;
-  }
+    function onAbandon(oldUI) {
+      if ((preview && preview.ui()) === oldUI) preview = null;
+    }
 
-  document.querySelectorAll(linkSelector).forEach(link => {
-    link.addEventListener("mouseenter", event => {
-      const link = event.target;
-      const title = link.dataset.wikiTitle;
-      const lang = link.dataset.wikiLang;
+    document.querySelectorAll(linkSelector).forEach(link => {
+      link.addEventListener("mouseenter", event => {
+        const link = event.target;
+        const title = link.dataset.wikiTitle;
+        const lang = link.dataset.wikiLang;
 
-      if (preview && link === preview.link()) {
-        preview.mouseenter(event);
-      } else {
-        preview && preview.die();
-        preview = createPreviewState(link, title, lang, onAbandon);
-        preview.load(event);
-      }
+        if (preview && link === preview.link()) {
+          preview.mouseenter(event);
+        } else {
+          preview && preview.die();
+          preview = createPreviewState(link, title, lang, onAbandon);
+          preview.load(event);
+        }
+      });
+    });
+
+    document.querySelectorAll(linkSelector).forEach(link => {
+      link.addEventListener("mouseout", event => {
+        preview.mouseout(event);
+      });
     });
   });
-
-  document.querySelectorAll(linkSelector).forEach(link => {
-    link.addEventListener("mouseout", event => {
-      preview.mouseout(event);
-    });
-  });
-});
+}
 
 function createPreviewState(link, title, lang, onAbandon) {
   const gateway = createGateway(lang);
