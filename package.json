@@ -4,9 +4,7 @@
   "description": "",
   "main": "dist/context-cards.js",
   "scripts": {
-    "start": "echo \"nothing here yet\"",
-    "build": "echo \"nothing here yet\"",
-    "deploy": "npm run build && gh-pages -d dist"
+    "deploy": "./scripts/build && gh-pages -d dist"
   },
   "files": [
     "dist/"
