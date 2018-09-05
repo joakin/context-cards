@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/context-cards.js",
   "scripts": {
-    "deploy": "./scripts/build && gh-pages -d dist"
+    "deploy": "./scripts/dist && gh-pages -d dist"
   },
   "files": [
     "dist/"

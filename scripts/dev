@@ -1,0 +1,5 @@
+#!/bin/bash
+
+while true; do
+    ls -d src/* | entr -d ./scripts/build
+done
