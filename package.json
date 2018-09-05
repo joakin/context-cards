@@ -2,11 +2,10 @@
   "name": "context-cards",
   "version": "1.2.2",
   "description": "",
-  "main": "index.js",
+  "main": "dist/context-cards.js",
   "scripts": {
-    "start": "webpack -w --mode=development",
-    "build": "webpack --mode=production",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "echo \"nothing here yet\"",
+    "build": "echo \"nothing here yet\"",
     "deploy": "npm run build && gh-pages -d dist"
   },
   "files": [
@@ -15,22 +14,8 @@
   "keywords": [],
   "author": "Joaquin Oltra <joaquin@chimeces.com> (http://chimeces.com)",
   "license": "ISC",
-  "dependencies": {
-    "prettier": "^1.12.1",
-    "wikimedia-ui-base": "^0.10.0"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.4",
-    "babel-preset-env": "^1.7.0",
-    "css-loader": "^0.28.11",
-    "gh-pages": "^1.1.0",
-    "less": "^3.0.4",
-    "less-loader": "^4.1.0",
-    "serve": "^6.5.7",
-    "style-loader": "^0.21.0",
-    "svg-inline-loader": "^0.8.0",
-    "webpack": "^4.8.3",
-    "webpack-cli": "^2.1.3"
+    "gh-pages": "^1.2.0"
   }
 }
