@@ -1,7 +1,8 @@
 port module ContextCards exposing (main)
 
 import Browser
-import Html exposing (Html, text)
+import Html exposing (Html, div, text)
+import Html.Attributes exposing (class, style)
 import Json.Decode as D
 
 
@@ -14,26 +15,27 @@ main =
         }
 
 
-type alias Model =
-    ()
+type Model
+    = Idle
+    | ActiveLink Link
 
 
 type Msg
     = MouseEventOnLink MouseEvent
 
 
-type alias MouseEvent =
-    { kind : MouseEventType
-    , lang : String
+type alias Link =
+    { lang : String
     , title : String
     , link : D.Value
     , rect : ClientRect
+    , scroll : Scroll
     }
 
 
-type MouseEventType
-    = Enter
-    | Leave
+type MouseEvent
+    = Enter Link
+    | Leave Link
 
 
 type alias ClientRect =
@@ -48,23 +50,65 @@ type alias ClientRect =
     }
 
 
+type alias Scroll =
+    { x : Float, y : Float }
+
+
 init : () -> ( Model, Cmd Msg )
 init () =
-    ( (), Cmd.none )
+    ( Idle, Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    let
-        _ =
-            Debug.log "msg" msg
-    in
-    ( model, Cmd.none )
+    case msg of
+        MouseEventOnLink event ->
+            case event of
+                Enter link ->
+                    ( ActiveLink link, Cmd.none )
+
+                Leave link ->
+                    case model of
+                        Idle ->
+                            ( model, Cmd.none )
+
+                        ActiveLink currentLink ->
+                            if currentLink.link == link.link then
+                                ( Idle, Cmd.none )
+
+                            else
+                                ( model, Cmd.none )
 
 
 view : Model -> Html Msg
 view model =
-    text "hi"
+    div []
+        [ case model of
+            Idle ->
+                text ""
+
+            ActiveLink link ->
+                viewCard link
+        ]
+
+
+viewCard : Link -> Html Msg
+viewCard link =
+    div
+        [ class "ContextCard"
+        , style "position" "absolute"
+        , style "top" (px (link.rect.top + link.scroll.y + link.rect.height))
+        , style "left" (px (link.rect.left + link.scroll.x))
+        , style "z-index" "10000"
+        , style "background-color" "white"
+        , style "padding" "1em"
+        , style "box-shadow" "0 0 20px rgba(0,0,0,0.1)"
+        ]
+        [ text link.title ]
+
+
+px n =
+    String.fromFloat n ++ "px"
 
 
 subscriptions : Model -> Sub Msg
@@ -78,22 +122,26 @@ type alias MouseEventJson =
     , title : String
     , link : D.Value
     , rect : ClientRect
+    , scroll : Scroll
     }
 
 
 mouseEventJsonToMouseEvent : MouseEventJson -> MouseEvent
 mouseEventJsonToMouseEvent json =
-    { kind =
-        if json.kind == "enter" then
-            Enter
+    let
+        link =
+            { lang = json.lang
+            , title = json.title
+            , link = json.link
+            , rect = json.rect
+            , scroll = json.scroll
+            }
+    in
+    if json.kind == "enter" then
+        Enter link
 
-        else
-            Leave
-    , lang = json.lang
-    , title = json.title
-    , link = json.link
-    , rect = json.rect
-    }
+    else
+        Leave link
 
 
 port mouseEvent : (MouseEventJson -> msg) -> Sub msg

@@ -27,25 +27,23 @@ window.ContextCards = (function() {
 
   function bindLink(link) {
     link.addEventListener("mouseenter", function(event) {
-      sendMouseEvent("enter", {
-        link: event.target,
-        title: link.dataset.wikiTitle,
-        lang: link.dataset.wikiLang,
-        rect: link.getBoundingClientRect()
-      });
+      sendMouseEvent("enter", event);
     });
     link.addEventListener("mouseout", function(event) {
-      sendMouseEvent("leave", {
-        link: event.target,
-        title: link.dataset.wikiTitle,
-        lang: link.dataset.wikiLang,
-        rect: link.getBoundingClientRect()
-      });
+      sendMouseEvent("leave", event);
     });
   }
 
-  function sendMouseEvent(kind, data) {
-    data.kind = kind;
+  function sendMouseEvent(kind, event) {
+    var link = event.target;
+    var data = {
+      kind: kind,
+      link: link,
+      title: link.dataset.wikiTitle,
+      lang: link.dataset.wikiLang,
+      rect: link.getBoundingClientRect(),
+      scroll: { x: window.scrollX, y: window.scrollY }
+    };
     contextCardsApp.ports.mouseEvent.send(data);
   }
 
