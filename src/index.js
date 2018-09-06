@@ -20,22 +20,33 @@ window.ContextCards = (function() {
       if (link.dataset.wikiPreviewEventsBound !== "events-set") {
         link.dataset.wikiPreviewEventsBound = "events-set";
 
-        link.addEventListener("mouseenter", function(event) {
-          var link = event.target;
-          var title = link.dataset.wikiTitle;
-          var lang = link.dataset.wikiLang;
-
-          console.log("mouseenter", title, " ", lang);
-        });
-        link.addEventListener("mouseout", function(event) {
-          var link = event.target;
-          var title = link.dataset.wikiTitle;
-          var lang = link.dataset.wikiLang;
-
-          console.log("mouseout", title, " ", lang);
-        });
+        bindLink(link);
       }
     }
+  }
+
+  function bindLink(link) {
+    link.addEventListener("mouseenter", function(event) {
+      sendMouseEvent("enter", {
+        link: event.target,
+        title: link.dataset.wikiTitle,
+        lang: link.dataset.wikiLang,
+        rect: link.getBoundingClientRect()
+      });
+    });
+    link.addEventListener("mouseout", function(event) {
+      sendMouseEvent("leave", {
+        link: event.target,
+        title: link.dataset.wikiTitle,
+        lang: link.dataset.wikiLang,
+        rect: link.getBoundingClientRect()
+      });
+    });
+  }
+
+  function sendMouseEvent(kind, data) {
+    data.kind = kind;
+    contextCardsApp.ports.mouseEvent.send(data);
   }
 
   return {
