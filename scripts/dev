@@ -1,5 +1,6 @@
 #!/bin/bash
 
+trap "exit" INT
 while true; do
     ls -d src/* | entr -d ./scripts/build
 done
