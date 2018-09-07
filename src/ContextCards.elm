@@ -1,11 +1,14 @@
 port module ContextCards exposing (main)
 
 import Browser
-import Html exposing (Html, div, node, text)
-import Html.Attributes exposing (class, classList, style)
+import Html exposing (Attribute, Html, div, img, node, p, text)
+import Html.Attributes exposing (attribute, class, classList, id, src, style)
 import Html.Events exposing (onMouseEnter, onMouseLeave)
 import Html.Keyed as Keyed
+import Html.Lazy as L
+import Http
 import Json.Decode as D
+import Json.Encode as E
 import Process
 import Task
 
@@ -20,8 +23,8 @@ main =
 
 
 type Model
-    = Idle (Maybe Link)
-    | Active Link InteractionStatus
+    = Idle (Maybe ( Link, Summary ))
+    | Active Link InteractionStatus (Maybe Summary)
 
 
 type InteractionStatus
@@ -38,6 +41,9 @@ type Msg
     | PreviewEnter Link
     | PreviewLeave Link
     | PreviewLeaveTimeout Link
+    | Fetch Link
+    | SummaryResponse Link (Result Http.Error Summary)
+    | IdleRemoveLastPreview
 
 
 type alias Link =
@@ -67,53 +73,81 @@ type alias Scroll =
 
 init : () -> ( Model, Cmd Msg )
 init () =
-    ( Idle Nothing, Cmd.none )
+    ( Idle Nothing
+    , Cmd.none
+    )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case ( model, msg ) of
+        ( Idle (Just _), IdleRemoveLastPreview ) ->
+            Idle Nothing |> noCmds
+
         ( _, LinkEnter link ) ->
-            ( Active link ActiveLink, Cmd.none )
+            ( Active link ActiveLink Nothing, fetchTimeout link )
 
-        ( Active currentLink ActiveLink, LinkLeave link ) ->
+        ( Active currentLink ActiveLink Nothing, Fetch link ) ->
             if currentLink.domElement == link.domElement then
-                ( Active link LeavingLink, timeout (LinkLeaveTimeout link) )
+                ( model
+                , Http.send (SummaryResponse link) (getSummary link.lang link.title)
+                )
 
             else
                 model |> noCmds
 
-        ( Active currentLink LeavingLink, LinkLeaveTimeout link ) ->
+        ( Active currentLink interactionStatus Nothing, SummaryResponse link response ) ->
             if currentLink.domElement == link.domElement then
-                idle link
+                case response of
+                    Ok summary ->
+                        ( Active link interactionStatus (Just summary)
+                        , renderHTML ()
+                        )
+
+                    Err err ->
+                        Idle Nothing |> noCmds
 
             else
                 model |> noCmds
 
-        ( Active currentLink LeavingLink, PreviewEnter link ) ->
+        ( Active currentLink ActiveLink summary, LinkLeave link ) ->
             if currentLink.domElement == link.domElement then
-                Active link ActivePreview |> noCmds
+                ( Active link LeavingLink summary, abandonTimeout (LinkLeaveTimeout link) )
 
             else
                 model |> noCmds
 
-        ( Active currentLink LeavingPreview, PreviewEnter link ) ->
+        ( Active currentLink LeavingLink summary, LinkLeaveTimeout link ) ->
             if currentLink.domElement == link.domElement then
-                Active link ActivePreview |> noCmds
+                idle link summary
 
             else
                 model |> noCmds
 
-        ( Active currentLink ActivePreview, PreviewLeave link ) ->
+        ( Active currentLink LeavingLink summary, PreviewEnter link ) ->
             if currentLink.domElement == link.domElement then
-                ( Active link LeavingPreview, timeout (PreviewLeaveTimeout link) )
+                Active link ActivePreview summary |> noCmds
 
             else
                 model |> noCmds
 
-        ( Active currentLink LeavingPreview, PreviewLeaveTimeout link ) ->
+        ( Active currentLink LeavingPreview summary, PreviewEnter link ) ->
             if currentLink.domElement == link.domElement then
-                idle link
+                Active link ActivePreview summary |> noCmds
+
+            else
+                model |> noCmds
+
+        ( Active currentLink ActivePreview summary, PreviewLeave link ) ->
+            if currentLink.domElement == link.domElement then
+                ( Active link LeavingPreview summary, abandonTimeout (PreviewLeaveTimeout link) )
+
+            else
+                model |> noCmds
+
+        ( Active currentLink LeavingPreview summary, PreviewLeaveTimeout link ) ->
+            if currentLink.domElement == link.domElement then
+                idle link summary
 
             else
                 model |> noCmds
@@ -126,41 +160,58 @@ noCmds model =
     ( model, Cmd.none )
 
 
-idle link =
-    ( Idle (Just link), Cmd.none )
+idle link maybeSummary =
+    case maybeSummary of
+        Just summary ->
+            ( Idle (Just ( link, summary ))
+              -- , removeIdleLastPreviewTimeout
+            , Cmd.none
+            )
+
+        Nothing ->
+            ( Idle Nothing, Cmd.none )
 
 
-timeout msg =
+abandonTimeout msg =
     Process.sleep 300 |> Task.perform (\() -> msg)
+
+
+fetchTimeout : Link -> Cmd Msg
+fetchTimeout link =
+    Process.sleep 150 |> Task.perform (\() -> Fetch link)
+
+
+removeIdleLastPreviewTimeout =
+    Process.sleep 1000 |> Task.perform (\() -> IdleRemoveLastPreview)
 
 
 view : Model -> Html Msg
 view model =
     let
-        viewLink link dismissed =
+        viewLink link summary dismissed =
             [ ( link.lang ++ " " ++ link.title
-              , viewCard link dismissed
+              , L.lazy3 viewCard link summary dismissed
               )
             ]
     in
     Keyed.node "div"
-        []
+        [ id "ContextCardsContainer" ]
     <|
         [ ( "styles", node "style" [] [ text styles ] ) ]
             ++ (case model of
                     Idle Nothing ->
                         []
 
-                    Idle (Just lastLink) ->
-                        viewLink lastLink True
+                    Idle (Just ( lastLink, lastSummary )) ->
+                        viewLink lastLink (Just lastSummary) True
 
-                    Active link interactionStatus ->
-                        viewLink link False
+                    Active link interactionStatus summary ->
+                        viewLink link summary False
                )
 
 
-viewCard : Link -> Bool -> Html Msg
-viewCard link dismissed =
+viewCard : Link -> Maybe Summary -> Bool -> Html Msg
+viewCard link maybeSummary dismissed =
     div
         [ classList
             [ ( "ContextCard", True )
@@ -171,7 +222,26 @@ viewCard link dismissed =
         , onMouseEnter (PreviewEnter link)
         , onMouseLeave (PreviewLeave link)
         ]
-        [ text link.title ]
+        [ case maybeSummary of
+            Just summary ->
+                L.lazy viewSummary summary
+
+            Nothing ->
+                text ""
+        ]
+
+
+viewSummary : Summary -> Html Msg
+viewSummary summary =
+    div [ class "ContextCardSummary" ]
+        [ img [ src "https://en.m.wikipedia.org/static/images/mobile/copyright/wikipedia-wordmark-en.png" ] []
+        , div [ innerHtml summary.contentHtml ] [ text summary.contentText ]
+        ]
+
+
+innerHtml : String -> Attribute msg
+innerHtml html =
+    attribute "inner-html" html
 
 
 px n =
@@ -213,10 +283,12 @@ styles =
         animation-delay: 500ms;
         animation-duration: 300ms;
         animation-fill-mode: both;
+        font-size: 80%;
     }
     .ContextCard.ContextCardDismissed {
         animation-name: contextCardsFadeOut;
         animation-delay: 0ms;
+        pointer-events: none;
     }
     """
 
@@ -255,3 +327,37 @@ mouseEventJsonToMouseEvent json =
 
 
 port mouseEvent : (MouseEventJson -> msg) -> Sub msg
+
+
+port renderHTML : () -> Cmd msg
+
+
+
+-- Data Fetching
+
+
+type alias Summary =
+    { title : String
+    , displayTitle : String
+    , description : String
+    , contentHtml : String
+    , contentText : String
+    }
+
+
+decodeSummary =
+    D.map5 Summary
+        (D.field "title" D.string)
+        (D.field "displaytitle" D.string)
+        (D.field "description" D.string)
+        (D.field "extract_html" D.string)
+        (D.field "extract" D.string)
+
+
+url lang title =
+    "https://" ++ lang ++ ".wikipedia.org/api/rest_v1/page/summary/" ++ title
+
+
+getSummary : String -> String -> Http.Request Summary
+getSummary lang title =
+    Http.get (url lang title) decodeSummary

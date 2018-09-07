@@ -8,6 +8,7 @@ window.ContextCards = (function() {
     var div = document.createElement("div");
     document.body.appendChild(div);
     contextCardsApp = Elm.ContextCards.init({ node: div });
+    contextCardsApp.ports.renderHTML.subscribe(renderHTML);
     bindLinks();
   });
 
@@ -45,6 +46,24 @@ window.ContextCards = (function() {
       scroll: { x: window.scrollX, y: window.scrollY }
     };
     contextCardsApp.ports.mouseEvent.send(data);
+  }
+
+  function renderHTML() {
+    raf(function() {
+      var nodes = document.querySelectorAll(".ContextCard [inner-html]");
+      for (var i = 0; i < nodes.length; i++) {
+        var node = nodes[i];
+        node.innerHTML = node.getAttribute("inner-html");
+        node.removeAttribute("inner-html");
+      }
+    });
+  }
+
+  function raf(fn) {
+    (window.requestAnimationFrame ||
+      function(f) {
+        setTimeout(f, 16);
+      })(fn);
   }
 
   return {
