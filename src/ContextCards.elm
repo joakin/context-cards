@@ -234,7 +234,11 @@ viewCard link maybeSummary dismissed =
 viewSummary : Summary -> Html Msg
 viewSummary summary =
     div [ class "ContextCardSummary" ]
-        [ img [ src "https://en.m.wikipedia.org/static/images/mobile/copyright/wikipedia-wordmark-en.png" ] []
+        [ img
+            [ class "ContextCardLogo"
+            , src "https://en.m.wikipedia.org/static/images/mobile/copyright/wikipedia-wordmark-en.png"
+            ]
+            []
         , div [ innerHtml summary.contentHtml ] [ text summary.contentText ]
         ]
 
@@ -284,11 +288,16 @@ styles =
         animation-duration: 300ms;
         animation-fill-mode: both;
         font-size: 80%;
+        max-width: 320px;
     }
     .ContextCard.ContextCardDismissed {
         animation-name: contextCardsFadeOut;
         animation-delay: 0ms;
         pointer-events: none;
+    }
+    .ContextCardLogo {
+        transform: scale(0.75);
+        transform-origin: left center;
     }
     """
 
