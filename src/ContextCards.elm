@@ -222,7 +222,12 @@ viewCard link maybeSummary dismissed =
         , onMouseEnter (PreviewEnter link)
         , onMouseLeave (PreviewLeave link)
         ]
-        [ case maybeSummary of
+        [ img
+            [ class "ContextCardLogo"
+            , src "https://en.m.wikipedia.org/static/images/mobile/copyright/wikipedia-wordmark-en.png"
+            ]
+            []
+        , case maybeSummary of
             Just summary ->
                 L.lazy viewSummary summary
 
@@ -234,12 +239,7 @@ viewCard link maybeSummary dismissed =
 viewSummary : Summary -> Html Msg
 viewSummary summary =
     div [ class "ContextCardSummary" ]
-        [ img
-            [ class "ContextCardLogo"
-            , src "https://en.m.wikipedia.org/static/images/mobile/copyright/wikipedia-wordmark-en.png"
-            ]
-            []
-        , div [ innerHtml summary.contentHtml ] [ text summary.contentText ]
+        [ div [ innerHtml summary.contentHtml ] [ text summary.contentText ]
         ]
 
 
@@ -281,14 +281,21 @@ styles =
         position: absolute;
         z-index: 10000;
         background-color: white;
-        padding: 1em;
-        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        box-shadow: 0 30px 90px -20px rgba( 0, 0, 0, 0.3 ), 0 0 1px #a2a9b1;
         animation-name: contextCardsFadeIn;
         animation-delay: 500ms;
         animation-duration: 300ms;
         animation-fill-mode: both;
-        font-size: 80%;
-        max-width: 320px;
+        padding: 16px;
+        width: 320px;
+        height: 180px;
+        border-radius: 2px;
+        overflow: hidden;
+    }
+    .ContextCard.ContextCardTall {
+        width: 215px;
+        height: 242px;
+        border-radius: 2px;
     }
     .ContextCard.ContextCardDismissed {
         animation-name: contextCardsFadeOut;
@@ -296,8 +303,27 @@ styles =
         pointer-events: none;
     }
     .ContextCardLogo {
-        transform: scale(0.75);
-        transform-origin: left center;
+        height: 15px;
+    }
+    .ContextCardSummary {
+        max-height: 160px;
+        overflow: hidden;
+        position: relative;
+        font-size: 75%;
+        line-height: 1.4;
+    }
+    .ContextCardSummary p {
+        margin: 0.4em 0;
+    }
+    .ContextCardSummary:before, .ContextCardSummary:after {
+        content: '';
+        display: block;
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%), linear-gradient(to bottom right, rgba(255, 255, 255, 0) 80%, rgba(255, 255, 255, 1) 100%);
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2em;
     }
     """
 
