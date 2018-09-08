@@ -212,21 +212,24 @@ view model =
 
 viewCard : Link -> Maybe Summary -> Bool -> Html Msg
 viewCard link maybeSummary dismissed =
+    let
+        topPosition =
+            link.rect.top + link.scroll.y + link.rect.height
+
+        leftPosition =
+            link.rect.left + link.scroll.x
+    in
     div
         [ classList
             [ ( "ContextCard", True )
             , ( "ContextCardDismissed", dismissed )
             ]
-        , style "top" (px (link.rect.top + link.scroll.y + link.rect.height))
-        , style "left" (px (link.rect.left + link.scroll.x))
+        , style "top" (px topPosition)
+        , style "left" (px leftPosition)
         , onMouseEnter (PreviewEnter link)
         , onMouseLeave (PreviewLeave link)
         ]
-        [ img
-            [ class "ContextCardLogo"
-            , src "https://en.m.wikipedia.org/static/images/mobile/copyright/wikipedia-wordmark-en.png"
-            ]
-            []
+        [ viewLogo
         , case maybeSummary of
             Just summary ->
                 L.lazy viewSummary summary
@@ -234,6 +237,18 @@ viewCard link maybeSummary dismissed =
             Nothing ->
                 text ""
         ]
+
+
+viewLogo =
+    let
+        logoUrl =
+            "https://en.m.wikipedia.org/static/images/mobile/copyright/wikipedia-wordmark-en.png"
+    in
+    img
+        [ class "ContextCardLogo"
+        , src logoUrl
+        ]
+        []
 
 
 viewSummary : Summary -> Html Msg
@@ -294,7 +309,6 @@ styles =
     }
     .ContextCard.ContextCardTall {
         width: 215px;
-        height: 242px;
         border-radius: 2px;
     }
     .ContextCard.ContextCardDismissed {
@@ -324,6 +338,8 @@ styles =
         left: 0;
         width: 100%;
         height: 2em;
+    }
+    .ContextCardThumbnail {
     }
     """
 
@@ -377,16 +393,55 @@ type alias Summary =
     , description : String
     , contentHtml : String
     , contentText : String
+    , thumbnail : Thumbnail
+    , dir : Dir
     }
 
 
+type alias Thumbnail =
+    { source : String
+    , width : Int
+    , height : Int
+    }
+
+
+type Dir
+    = LTR
+    | RTL
+
+
 decodeSummary =
-    D.map5 Summary
+    D.map7 Summary
         (D.field "title" D.string)
         (D.field "displaytitle" D.string)
         (D.field "description" D.string)
         (D.field "extract_html" D.string)
         (D.field "extract" D.string)
+        (D.field "thumbnail" decodeThumbnail)
+        (D.field "dir" decodeDir)
+
+
+decodeThumbnail =
+    D.map3 Thumbnail
+        (D.field "source" D.string)
+        (D.field "width" D.int)
+        (D.field "height" D.int)
+
+
+decodeDir =
+    D.string
+        |> D.andThen
+            (\str ->
+                case str of
+                    "ltr" ->
+                        D.succeed LTR
+
+                    "rtl" ->
+                        D.succeed RTL
+
+                    _ ->
+                        D.fail ("Unknown language direction: " ++ str)
+            )
 
 
 url lang title =
