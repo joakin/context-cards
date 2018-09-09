@@ -207,28 +207,126 @@ view model =
                )
 
 
-viewCard : Link -> Maybe Summary -> Bool -> Html Msg
-viewCard link maybeSummary dismissed =
+type PreviewKind
+    = Horizontal
+    | Vertical
+
+
+type alias Dimensions =
+    { kind : PreviewKind
+    , top : Float
+    , left : Float
+    , constrainedSize : { styleAttr : String, value : Float }
+    , extractWidth : Float
+    , extractMaxHeight : String
+    , extractOrder : Int
+    , thumbnailWidth : Float
+    , thumbnailHeight : Float
+    }
+
+
+getDimensions : ClientRect -> Viewport -> Summary -> Dimensions
+getDimensions linkRect { viewport, scene } ({ thumbnail } as summary) =
     let
+        isHorizontalPreview =
+            thumbnail.height > thumbnail.width
+
+        kind =
+            if isHorizontalPreview then
+                Horizontal
+
+            else
+                Vertical
+
+        horizontalPreviewHeight =
+            250
+
+        verticalPreviewWidth =
+            320
+
+        ( thumbnailMaxSize, thumbnailOtherDimension ) =
+            if isHorizontalPreview then
+                ( horizontalPreviewHeight
+                , thumbnail.width * horizontalPreviewHeight / thumbnail.height
+                )
+
+            else
+                ( verticalPreviewWidth
+                , thumbnail.height * verticalPreviewWidth / thumbnail.width
+                )
+
+        ( thumbnailWidth, thumbnailHeight ) =
+            if isHorizontalPreview then
+                ( thumbnailOtherDimension, thumbnailMaxSize )
+
+            else
+                ( thumbnailMaxSize, thumbnailOtherDimension )
+
         topPosition =
-            link.rect.top + link.viewport.viewport.y + link.rect.height
+            linkRect.top + viewport.y + linkRect.height
 
         leftPosition =
-            link.rect.left + link.viewport.viewport.x
+            linkRect.left + viewport.x
+
+        constrainedSize =
+            if isHorizontalPreview then
+                { styleAttr = "max-height", value = horizontalPreviewHeight }
+
+            else
+                { styleAttr = "max-width", value = verticalPreviewWidth }
+
+        extractWidth =
+            if isHorizontalPreview then
+                260
+
+            else
+                verticalPreviewWidth
+
+        extractMaxHeight =
+            if isHorizontalPreview then
+                "100%"
+
+            else
+                px 190
+
+        extractOrder =
+            if isHorizontalPreview then
+                0
+
+            else
+                1
     in
+    { kind = kind
+    , top = topPosition
+    , left = leftPosition
+    , constrainedSize = constrainedSize
+    , extractWidth = extractWidth
+    , extractMaxHeight = extractMaxHeight
+    , extractOrder = extractOrder
+    , thumbnailWidth = thumbnailWidth
+    , thumbnailHeight = thumbnailHeight
+    }
+
+
+viewCard : Link -> Maybe Summary -> Bool -> Html Msg
+viewCard link maybeSummary dismissed =
     case maybeSummary of
         Just summary ->
+            let
+                dimensions =
+                    getDimensions link.rect link.viewport summary
+            in
             div
                 [ classList
                     [ ( "ContextCard", True )
                     , ( "ContextCardDismissed", dismissed )
                     ]
-                , style "top" (px topPosition)
-                , style "left" (px leftPosition)
+                , style "top" (px dimensions.top)
+                , style "left" (px dimensions.left)
                 , onMouseEnter (PreviewEnter link)
                 , onMouseLeave (PreviewLeave link)
                 ]
-                [ L.lazy viewSummary summary ]
+                [ L.lazy2 viewSummary dimensions summary ]
 
         Nothing ->
             text ""
@@ -239,95 +337,50 @@ viewLogo =
         logoUrl =
             "https://en.m.wikipedia.org/static/images/mobile/copyright/wikipedia-wordmark-en.png"
     in
-    img
-        [ class "ContextCardLogo"
-        , src logoUrl
-        ]
-        []
+    img [ class "ContextCardLogo", src logoUrl ] []
 
 
-viewSummary : Summary -> Html Msg
-viewSummary ({ thumbnail } as summary) =
+viewSummary : Dimensions -> Summary -> Html Msg
+viewSummary dimensions ({ thumbnail } as summary) =
     let
-        isHorizontalPreview =
-            thumbnail.height > thumbnail.width
+        { constrainedSize, kind, extractOrder, extractWidth, extractMaxHeight } =
+            dimensions
 
-        horizontalPreviewHeight =
-            250
+        summaryStyles =
+            [ style "flex-direction"
+                (case kind of
+                    Horizontal ->
+                        "row"
 
-        verticalPreviewWidth =
-            320
+                    Vertical ->
+                        "column"
+                )
+            , style constrainedSize.styleAttr (px constrainedSize.value)
+            ]
 
-        thumbnailMaxSize =
-            if isHorizontalPreview then
-                horizontalPreviewHeight
-
-            else
-                verticalPreviewWidth
+        extractStyles =
+            [ style "order" (String.fromInt extractOrder)
+            , style "width" (px extractWidth)
+            , style "max-height" extractMaxHeight
+            ]
     in
     div
-        [ class "ContextCardSummary"
-        , style "flex-direction"
-            (if isHorizontalPreview then
-                "row"
-
-             else
-                "column"
-            )
-        , if isHorizontalPreview then
-            style "max-height" (px horizontalPreviewHeight)
-
-          else
-            style "max-width" (px verticalPreviewWidth)
-        ]
+        (class "ContextCardSummary" :: summaryStyles)
         [ div
-            [ class "ContextCardExtract"
-            , style "order"
-                (if isHorizontalPreview then
-                    "0"
-
-                 else
-                    "1"
-                )
-            , if isHorizontalPreview then
-                style "width" (px 260)
-
-              else
-                style "width" (px verticalPreviewWidth)
-            , if isHorizontalPreview then
-                style "max-height" "100%"
-
-              else
-                style "max-height" (px 190)
-            ]
+            (class "ContextCardExtract" :: extractStyles)
             [ viewLogo
             , div [ innerHtml summary.contentHtml ] [ text summary.contentText ]
             ]
-        , viewThumbnail thumbnail isHorizontalPreview thumbnailMaxSize
+        , viewThumbnail dimensions thumbnail
         ]
 
 
-viewThumbnail thumbnail isHorizontalPreview size =
-    let
-        otherDimension =
-            if isHorizontalPreview then
-                thumbnail.width * size / thumbnail.height
-
-            else
-                thumbnail.height * size / thumbnail.width
-
-        ( w, h ) =
-            if isHorizontalPreview then
-                ( otherDimension, size )
-
-            else
-                ( size, otherDimension )
-    in
+viewThumbnail dimensions thumbnail =
     div
         [ class "ContextCardThumbnail"
         , style "background-image" ("url(" ++ thumbnail.source ++ ")")
-        , style "width" (px w)
-        , style "height" (px h)
+        , style "width" (px dimensions.thumbnailWidth)
+        , style "height" (px dimensions.thumbnailHeight)
         ]
         []
 
