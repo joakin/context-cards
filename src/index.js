@@ -9,6 +9,7 @@ window.ContextCards = (function() {
     document.body.appendChild(div);
     contextCardsApp = Elm.ContextCards.init({ node: div });
     contextCardsApp.ports.renderHTML.subscribe(renderHTML);
+    contextCardsApp.ports.log.subscribe(console.log);
     bindLinks();
   });
 

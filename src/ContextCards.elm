@@ -7,7 +7,7 @@ import Html.Attributes exposing (attribute, class, classList, id, src, style)
 import Html.Events exposing (onMouseEnter, onMouseLeave)
 import Html.Keyed as Keyed
 import Html.Lazy as L
-import Http
+import Http exposing (Error(..))
 import Json.Decode as D
 import Json.Encode as E
 import Process
@@ -102,7 +102,25 @@ update msg model =
                         )
 
                     Err err ->
-                        Idle Nothing |> noCmds
+                        let
+                            strErr =
+                                case err of
+                                    BadUrl str ->
+                                        "Bad URL: " ++ str
+
+                                    Timeout ->
+                                        "Request timed out"
+
+                                    NetworkError ->
+                                        "Network error"
+
+                                    BadStatus res ->
+                                        "Status error: " ++ String.fromInt res.status.code ++ " - " ++ res.status.message
+
+                                    BadPayload errMsg res ->
+                                        "Payload error:\n" ++ errMsg
+                        in
+                        ( Idle Nothing, log ("Request failed\n" ++ strErr) )
 
             else
                 model |> noCmds
@@ -229,7 +247,9 @@ getDimensions : ClientRect -> Viewport -> Summary -> Dimensions
 getDimensions linkRect { viewport, scene } ({ thumbnail } as summary) =
     let
         isHorizontalPreview =
-            thumbnail.height > thumbnail.width
+            thumbnail
+                |> Maybe.map (\t -> t.height > t.width)
+                |> Maybe.withDefault True
 
         kind =
             if isHorizontalPreview then
@@ -245,15 +265,21 @@ getDimensions linkRect { viewport, scene } ({ thumbnail } as summary) =
             320
 
         ( thumbnailMaxSize, thumbnailOtherDimension ) =
-            if isHorizontalPreview then
-                ( horizontalPreviewHeight
-                , thumbnail.width * horizontalPreviewHeight / thumbnail.height
-                )
+            case thumbnail of
+                Just thumb ->
+                    if isHorizontalPreview then
+                        ( horizontalPreviewHeight
+                        , thumb.width * horizontalPreviewHeight / thumb.height
+                        )
 
-            else
-                ( verticalPreviewWidth
-                , thumbnail.height * verticalPreviewWidth / thumbnail.width
-                )
+                    else
+                        ( verticalPreviewWidth
+                        , thumb.height * verticalPreviewWidth / thumb.width
+                        )
+
+                Nothing ->
+                    -- Won't be used
+                    ( 0, 0 )
 
         ( thumbnailWidth, thumbnailHeight ) =
             if isHorizontalPreview then
@@ -371,7 +397,12 @@ viewSummary dimensions ({ thumbnail } as summary) =
             [ viewLogo
             , div [ innerHtml summary.contentHtml ] [ text summary.contentText ]
             ]
-        , viewThumbnail dimensions thumbnail
+        , case thumbnail of
+            Just thumb ->
+                viewThumbnail dimensions thumb
+
+            Nothing ->
+                text ""
         ]
 
 
@@ -510,6 +541,9 @@ port mouseEvent : (MouseEventJson -> msg) -> Sub msg
 port renderHTML : () -> Cmd msg
 
 
+port log : String -> Cmd msg
+
+
 
 -- Data Fetching
 
@@ -517,10 +551,9 @@ port renderHTML : () -> Cmd msg
 type alias Summary =
     { title : String
     , displayTitle : String
-    , description : String
     , contentHtml : String
     , contentText : String
-    , thumbnail : Thumbnail
+    , thumbnail : Maybe Thumbnail
     , dir : Dir
     }
 
@@ -538,13 +571,12 @@ type Dir
 
 
 decodeSummary =
-    D.map7 Summary
+    D.map6 Summary
         (D.field "title" D.string)
         (D.field "displaytitle" D.string)
-        (D.field "description" D.string)
         (D.field "extract_html" D.string)
         (D.field "extract" D.string)
-        (D.field "thumbnail" decodeThumbnail)
+        (D.field "thumbnail" <| D.maybe decodeThumbnail)
         (D.field "dir" decodeDir)
 
 
