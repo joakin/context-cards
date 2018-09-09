@@ -219,24 +219,22 @@ viewCard link maybeSummary dismissed =
         leftPosition =
             link.rect.left + link.scroll.x
     in
-    div
-        [ classList
-            [ ( "ContextCard", True )
-            , ( "ContextCardDismissed", dismissed )
-            ]
-        , style "top" (px topPosition)
-        , style "left" (px leftPosition)
-        , onMouseEnter (PreviewEnter link)
-        , onMouseLeave (PreviewLeave link)
-        ]
-        [ viewLogo
-        , case maybeSummary of
-            Just summary ->
-                L.lazy viewSummary summary
+    case maybeSummary of
+        Just summary ->
+            div
+                [ classList
+                    [ ( "ContextCard", True )
+                    , ( "ContextCardDismissed", dismissed )
+                    ]
+                , style "top" (px topPosition)
+                , style "left" (px leftPosition)
+                , onMouseEnter (PreviewEnter link)
+                , onMouseLeave (PreviewLeave link)
+                ]
+                [ L.lazy viewSummary summary ]
 
-            Nothing ->
-                text ""
-        ]
+        Nothing ->
+            text ""
 
 
 viewLogo =
@@ -252,10 +250,89 @@ viewLogo =
 
 
 viewSummary : Summary -> Html Msg
-viewSummary summary =
-    div [ class "ContextCardSummary" ]
-        [ div [ innerHtml summary.contentHtml ] [ text summary.contentText ]
+viewSummary ({ thumbnail } as summary) =
+    let
+        isHorizontalPreview =
+            thumbnail.height > thumbnail.width
+
+        horizontalPreviewHeight =
+            250
+
+        verticalPreviewWidth =
+            320
+
+        thumbnailMaxSize =
+            if isHorizontalPreview then
+                horizontalPreviewHeight
+
+            else
+                verticalPreviewWidth
+    in
+    div
+        [ class "ContextCardSummary"
+        , style "flex-direction"
+            (if isHorizontalPreview then
+                "row"
+
+             else
+                "column"
+            )
+        , if isHorizontalPreview then
+            style "max-height" (px horizontalPreviewHeight)
+
+          else
+            style "max-width" (px verticalPreviewWidth)
         ]
+        [ div
+            [ class "ContextCardExtract"
+            , style "order"
+                (if isHorizontalPreview then
+                    "0"
+
+                 else
+                    "1"
+                )
+            , if isHorizontalPreview then
+                style "width" (px 260)
+
+              else
+                style "width" (px verticalPreviewWidth)
+            , if isHorizontalPreview then
+                style "max-height" "100%"
+
+              else
+                style "max-height" (px 190)
+            ]
+            [ viewLogo
+            , div [ innerHtml summary.contentHtml ] [ text summary.contentText ]
+            ]
+        , viewThumbnail thumbnail isHorizontalPreview thumbnailMaxSize
+        ]
+
+
+viewThumbnail thumbnail isHorizontalPreview size =
+    let
+        otherDimension =
+            if isHorizontalPreview then
+                thumbnail.width * size / thumbnail.height
+
+            else
+                thumbnail.height * size / thumbnail.width
+
+        ( w, h ) =
+            if isHorizontalPreview then
+                ( otherDimension, size )
+
+            else
+                ( size, otherDimension )
+    in
+    div
+        [ class "ContextCardThumbnail"
+        , style "background-image" ("url(" ++ thumbnail.source ++ ")")
+        , style "width" (px w)
+        , style "height" (px h)
+        ]
+        []
 
 
 innerHtml : String -> Attribute msg
@@ -291,6 +368,9 @@ styles =
             transform: translate3d(0, 50%, 0);
         }
     }
+    .ContextCard, .ContextCard * {
+        box-sizing: border-box;
+    }
 
     .ContextCard {
         position: absolute;
@@ -298,38 +378,32 @@ styles =
         background-color: white;
         box-shadow: 0 30px 90px -20px rgba( 0, 0, 0, 0.3 ), 0 0 1px #a2a9b1;
         animation-name: contextCardsFadeIn;
-        animation-delay: 500ms;
         animation-duration: 300ms;
         animation-fill-mode: both;
-        padding: 16px;
-        width: 320px;
-        height: 180px;
         border-radius: 2px;
         overflow: hidden;
     }
-    .ContextCard.ContextCardTall {
-        width: 215px;
-        border-radius: 2px;
-    }
     .ContextCard.ContextCardDismissed {
         animation-name: contextCardsFadeOut;
-        animation-delay: 0ms;
         pointer-events: none;
     }
     .ContextCardLogo {
         height: 15px;
     }
     .ContextCardSummary {
-        max-height: 160px;
+        display: flex;
+    }
+    .ContextCardExtract {
+        padding: 1em;
         overflow: hidden;
         position: relative;
-        font-size: 75%;
+        font-size: 14px;
         line-height: 1.4;
     }
-    .ContextCardSummary p {
+    .ContextCardExtract p {
         margin: 0.4em 0;
     }
-    .ContextCardSummary:before, .ContextCardSummary:after {
+    .ContextCardExtract:before, .ContextCardExtract:after {
         content: '';
         display: block;
         background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%), linear-gradient(to bottom right, rgba(255, 255, 255, 0) 80%, rgba(255, 255, 255, 1) 100%);
@@ -337,9 +411,12 @@ styles =
         bottom: 0;
         left: 0;
         width: 100%;
-        height: 2em;
+        height: 3em;
     }
     .ContextCardThumbnail {
+        flex-shrink: 0;
+        background-position: center center;
+        background-size: 110%;
     }
     """
 
@@ -400,8 +477,8 @@ type alias Summary =
 
 type alias Thumbnail =
     { source : String
-    , width : Int
-    , height : Int
+    , width : Float
+    , height : Float
     }
 
 
@@ -424,8 +501,8 @@ decodeSummary =
 decodeThumbnail =
     D.map3 Thumbnail
         (D.field "source" D.string)
-        (D.field "width" D.int)
-        (D.field "height" D.int)
+        (D.field "width" D.float)
+        (D.field "height" D.float)
 
 
 decodeDir =
