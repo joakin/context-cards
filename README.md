@@ -28,7 +28,7 @@ Those links should show the previews now!
 
 ## WIP
 
-This is a work in progress, a prototype to show how it would be done.
+This is a work in progress, there are things that can be improved.
 
 Based on the original work on
 [Extension:Popups](https://mediawiki.org/wiki/Extension:Popups).
