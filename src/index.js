@@ -43,9 +43,42 @@ window.ContextCards = (function() {
       title: link.dataset.wikiTitle,
       lang: link.dataset.wikiLang,
       rect: link.getBoundingClientRect(),
-      scroll: { x: window.scrollX, y: window.scrollY }
+      viewport: getViewport()
     };
     contextCardsApp.ports.mouseEvent.send(data);
+  }
+
+  function getViewport() {
+    return {
+      scene: getScene(),
+      viewport: {
+        x: window.pageXOffset,
+        y: window.pageYOffset,
+        width: document.documentElement.clientWidth,
+        height: document.documentElement.clientHeight
+      }
+    };
+  }
+
+  function getScene() {
+    var body = document.body;
+    var elem = document.documentElement;
+    return {
+      width: Math.max(
+        body.scrollWidth,
+        body.offsetWidth,
+        elem.scrollWidth,
+        elem.offsetWidth,
+        elem.clientWidth
+      ),
+      height: Math.max(
+        body.scrollHeight,
+        body.offsetHeight,
+        elem.scrollHeight,
+        elem.offsetHeight,
+        elem.clientHeight
+      )
+    };
   }
 
   function renderHTML() {

@@ -1,6 +1,7 @@
 port module ContextCards exposing (main)
 
 import Browser
+import Browser.Dom exposing (Viewport)
 import Html exposing (Attribute, Html, div, img, node, p, text)
 import Html.Attributes exposing (attribute, class, classList, id, src, style)
 import Html.Events exposing (onMouseEnter, onMouseLeave)
@@ -51,7 +52,7 @@ type alias Link =
     , title : String
     , domElement : D.Value
     , rect : ClientRect
-    , scroll : Scroll
+    , viewport : Viewport
     }
 
 
@@ -65,10 +66,6 @@ type alias ClientRect =
     , left : Float
     , right : Float
     }
-
-
-type alias Scroll =
-    { x : Float, y : Float }
 
 
 init : () -> ( Model, Cmd Msg )
@@ -214,10 +211,10 @@ viewCard : Link -> Maybe Summary -> Bool -> Html Msg
 viewCard link maybeSummary dismissed =
     let
         topPosition =
-            link.rect.top + link.scroll.y + link.rect.height
+            link.rect.top + link.viewport.viewport.y + link.rect.height
 
         leftPosition =
-            link.rect.left + link.scroll.x
+            link.rect.left + link.viewport.viewport.x
     in
     case maybeSummary of
         Just summary ->
@@ -432,7 +429,7 @@ type alias MouseEventJson =
     , title : String
     , link : D.Value
     , rect : ClientRect
-    , scroll : Scroll
+    , viewport : Viewport
     }
 
 
@@ -444,7 +441,7 @@ mouseEventJsonToMouseEvent json =
             , title = json.title
             , domElement = json.link
             , rect = json.rect
-            , scroll = json.scroll
+            , viewport = json.viewport
             }
     in
     if json.kind == "enter" then
