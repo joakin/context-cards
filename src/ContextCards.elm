@@ -361,7 +361,7 @@ viewCard link maybeSummary dismissed =
 viewLogo =
     let
         logoUrl =
-            "https://en.m.wikipedia.org/static/images/mobile/copyright/wikipedia-wordmark-en.png"
+            "https://en.m.wikipedia.org/static/images/mobile/copyright/wikipedia-wordmark-en.svg"
     in
     img [ class "ContextCardLogo", src logoUrl ] []
 
