@@ -1,7 +1,0 @@
-#!/bin/bash
-
-f=dist/context-cards.js
-args="$@"
-
-elm make src/ContextCards.elm --output $f $args
-cat src/index.js >> $f
