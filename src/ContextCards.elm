@@ -576,7 +576,7 @@ decodeSummary =
         (D.field "displaytitle" D.string)
         (D.field "extract_html" D.string)
         (D.field "extract" D.string)
-        (D.field "thumbnail" <| D.maybe decodeThumbnail)
+        (D.maybe <| D.field "thumbnail" decodeThumbnail)
         (D.field "dir" decodeDir)
 
 
