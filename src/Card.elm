@@ -141,11 +141,11 @@ styles =
     .ContextCardExtract:before, .ContextCardExtract:after {
         content: '';
         display: block;
-        background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%), linear-gradient(to bottom right, rgba(255, 255, 255, 0) 80%, rgba(255, 255, 255, 1) 100%);
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 80%), linear-gradient(to bottom right, rgba(255, 255, 255, 0) 80%, rgba(255, 255, 255, 1) 100%);
         position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
+        bottom: 0px;
+        left: 1px;
+        right: 1px;
         height: 3em;
     }
     .ContextCardThumbnail {
