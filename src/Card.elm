@@ -1,9 +1,9 @@
 module Card exposing (ClientRect, Events, Link, styles, view)
 
 import Browser.Dom exposing (Viewport)
-import Data exposing (Summary, Thumbnail)
+import Data exposing (Dir(..), Summary, Thumbnail)
 import Html exposing (..)
-import Html.Attributes exposing (attribute, class, classList, id, src, style)
+import Html.Attributes exposing (attribute, class, classList, dir, id, src, style)
 import Html.Events exposing (onMouseEnter, onMouseLeave)
 import Html.Keyed as Keyed
 import Html.Lazy as L
@@ -66,6 +66,7 @@ view events link maybeSummary dismissed =
                     [ ( "ContextCard", True )
                     , ( "ContextCardDismissed", dismissed )
                     ]
+                , dir <| dirToString summary.dir
                 , style "top" (px dimensions.top)
                 , style "left" (px dimensions.left)
                 , onMouseEnter (events.mouseEnter link)
@@ -304,6 +305,15 @@ viewSummary dimensions ({ thumbnail } as summary) =
             Nothing ->
                 text ""
         ]
+
+
+dirToString dir =
+    case dir of
+        LTR ->
+            "ltr"
+
+        RTL ->
+            "rtl"
 
 
 viewThumbnail : Dimensions -> Thumbnail -> Html msg
