@@ -1,15 +1,40 @@
-<body>
-  <ul>
-    <li>
-      <a
-        href="https://en.wikipedia.org/wiki/Gradient_descent"
-        class="wiki-preview"
-        data-wiki-lang="en"
-        data-wiki-title="Gradient descent"
-        >Gradient descent</a
-      >
-    </li>
-  </ul>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body {
+        background: #f2f4f7;
+        padding: 20px 5%;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Context cards UI tests</h1>
+    <main></main>
+    <script src="./context-cards-ui-test.js"></script>
+    <script>
+      var app = Elm.UiTests.init({ node: document.querySelector("main") });
 
-  <script src="./context-cards.js"></script>
-</body>
+      raf(renderHTML);
+
+      function renderHTML() {
+        raf(function() {
+          var nodes = document.querySelectorAll(".ContextCard [inner-html]");
+          for (var i = 0; i < nodes.length; i++) {
+            var node = nodes[i];
+            node.innerHTML = node.getAttribute("inner-html");
+            node.removeAttribute("inner-html");
+          }
+        });
+      }
+
+      function raf(fn) {
+        (window.requestAnimationFrame ||
+          function(f) {
+            setTimeout(f, 16);
+          })(fn);
+      }
+    </script>
+  </body>
+</html>
