@@ -45,7 +45,6 @@ type Msg
     | PreviewLeaveTimeout Link
     | Fetch Link
     | SummaryResponse Link (Result Http.Error Summary)
-    | IdleRemoveLastPreview
 
 
 type alias Link =
@@ -79,9 +78,6 @@ init () =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case ( model, msg ) of
-        ( Idle (Just _), IdleRemoveLastPreview ) ->
-            ( Idle Nothing, Cmd.none )
-
         ( _, LinkEnter link ) ->
             ( Active link ActiveLink Nothing, fetchTimeout link )
 
@@ -193,11 +189,6 @@ abandonTimeout msg =
 fetchTimeout : Link -> Cmd Msg
 fetchTimeout link =
     Process.sleep 150 |> Task.perform (\() -> Fetch link)
-
-
-removeIdleLastPreviewTimeout : Cmd Msg
-removeIdleLastPreviewTimeout =
-    Process.sleep 1000 |> Task.perform (\() -> IdleRemoveLastPreview)
 
 
 view : Model -> Html Msg
