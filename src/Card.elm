@@ -152,6 +152,7 @@ styles =
         flex-shrink: 0;
         background-position: center center;
         background-size: 110%;
+        box-shadow: 0 0 1px #a2a9b1;
     }
     """
 
