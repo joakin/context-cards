@@ -1,15 +1,13 @@
-<body>
-  <ul>
-    <li>
-      <a
-        href="https://en.wikipedia.org/wiki/Gradient_descent"
-        class="wiki-preview"
-        data-wiki-lang="en"
-        data-wiki-title="Gradient descent"
-        >Gradient descent</a
-      >
-    </li>
-  </ul>
-
-  <script src="./context-cards.js"></script>
-</body>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <main></main>
+    <script src="./context-cards-ui-test.js"></script>
+    <script>
+      var app = Elm.UiTests.init({ node: document.querySelector("main") });
+    </script>
+  </body>
+</html>
