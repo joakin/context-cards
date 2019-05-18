@@ -124,7 +124,6 @@ styles =
     }
     .ContextCardLogo {
         height: 15px;
-        margin-bottom: 10px;
     }
     .ContextCardSummary {
         display: flex;
