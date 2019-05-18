@@ -3,7 +3,7 @@ module Card exposing (ClientRect, Events, Link, styles, view)
 import Browser.Dom exposing (Viewport)
 import Data exposing (Dir(..), Summary, Thumbnail)
 import Html exposing (..)
-import Html.Attributes exposing (attribute, class, classList, dir, id, src, style)
+import Html.Attributes exposing (attribute, class, classList, dir, href, id, src, style, target)
 import Html.Events exposing (onMouseEnter, onMouseLeave)
 import Html.Keyed as Keyed
 import Html.Lazy as L
@@ -72,7 +72,7 @@ view events link maybeSummary dismissed =
                 , onMouseEnter (events.mouseEnter link)
                 , onMouseLeave (events.mouseLeave link)
                 ]
-                [ L.lazy2 viewSummary dimensions summary ]
+                [ L.lazy3 viewSummary link dimensions summary ]
 
         Nothing ->
             text ""
@@ -279,8 +279,8 @@ viewLogo =
     img [ class "ContextCardLogo", src logoUrl ] []
 
 
-viewSummary : Dimensions -> Summary -> Html msg
-viewSummary dimensions ({ thumbnail } as summary) =
+viewSummary : Link -> Dimensions -> Summary -> Html msg
+viewSummary link dimensions ({ thumbnail } as summary) =
     let
         { constrainedSize, kind, extractOrder, extractWidth, extractMaxHeight } =
             dimensions
@@ -302,17 +302,20 @@ viewSummary dimensions ({ thumbnail } as summary) =
             , style "width" (px extractWidth)
             , style "max-height" extractMaxHeight
             ]
+
+        url =
+            wikipediaUrl link
     in
     div
         (class "ContextCardSummary" :: summaryStyles)
         [ div
             (class "ContextCardExtract" :: extractStyles)
-            [ viewLogo
+            [ a [ href url, target "_blank" ] [ viewLogo ]
             , div [ innerHtml summary.contentHtml ] [ text summary.contentText ]
             ]
         , case thumbnail of
             Just thumb ->
-                viewThumbnail dimensions thumb
+                viewThumbnail url dimensions thumb
 
             Nothing ->
                 text ""
@@ -328,12 +331,19 @@ dirToString dir =
             "rtl"
 
 
-viewThumbnail : Dimensions -> Thumbnail -> Html msg
-viewThumbnail dimensions thumbnail =
-    div
-        [ class "ContextCardThumbnail"
+viewThumbnail : String -> Dimensions -> Thumbnail -> Html msg
+viewThumbnail url dimensions thumbnail =
+    a
+        [ href url
+        , target "_blank"
+        , class "ContextCardThumbnail"
         , style "background-image" ("url(" ++ thumbnail.source ++ ")")
         , style "width" (px dimensions.thumbnailWidth)
         , style "height" (px dimensions.thumbnailHeight)
         ]
         []
+
+
+wikipediaUrl : Link -> String
+wikipediaUrl link =
+    "https://" ++ link.lang ++ ".wikipedia.org/wiki/" ++ link.title
