@@ -25,7 +25,7 @@ $(JSUITESTFILE): $(ELMUITESTMAIN) $(ELM_SOURCES)
 	@elm make $< --output $@
 
 clean:
-	rm $(JSFILE)
+	rm $(JSFILE) $(JSUITESTFILE)
 
 # dev: ELM_MAKE_FLAGS += --debug
 dev: all
