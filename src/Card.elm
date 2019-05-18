@@ -188,6 +188,14 @@ getDimensions linkRect { viewport } ({ thumbnail } as summary) =
         verticalPreviewWidth =
             320
 
+        hasThumbnail =
+            case thumbnail of
+                Just thumb ->
+                    True
+
+                Nothing ->
+                    False
+
         ( thumbnailMaxSize, thumbnailOtherDimension ) =
             case thumbnail of
                 Just thumb ->
@@ -227,7 +235,11 @@ getDimensions linkRect { viewport } ({ thumbnail } as summary) =
 
         extractWidth =
             if isHorizontalPreview then
-                260
+                if hasThumbnail then
+                    260
+
+                else
+                    320
 
             else
                 verticalPreviewWidth
