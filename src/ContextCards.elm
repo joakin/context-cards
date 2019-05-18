@@ -8,12 +8,13 @@ import Html.Events exposing (onMouseEnter, onMouseLeave)
 import Html.Keyed as Keyed
 import Html.Lazy as L
 import Http exposing (Error(..))
-import Json.Decode as D
+import Json.Decode as D exposing (Decoder)
 import Json.Encode as E
 import Process
 import Task
 
 
+main : Program () Model Msg
 main =
     Browser.element
         { init = init
@@ -171,6 +172,7 @@ update msg model =
             ( model, Cmd.none )
 
 
+idle : Link -> Maybe Summary -> ( Model, Cmd Msg )
 idle link maybeSummary =
     case maybeSummary of
         Just summary ->
@@ -183,6 +185,7 @@ idle link maybeSummary =
             ( Idle Nothing, Cmd.none )
 
 
+abandonTimeout : Msg -> Cmd Msg
 abandonTimeout msg =
     Process.sleep 300 |> Task.perform (\() -> msg)
 
@@ -192,6 +195,7 @@ fetchTimeout link =
     Process.sleep 150 |> Task.perform (\() -> Fetch link)
 
 
+removeIdleLastPreviewTimeout : Cmd Msg
 removeIdleLastPreviewTimeout =
     Process.sleep 1000 |> Task.perform (\() -> IdleRemoveLastPreview)
 
@@ -354,6 +358,7 @@ viewCard link maybeSummary dismissed =
             text ""
 
 
+viewLogo : Html Msg
 viewLogo =
     let
         logoUrl =
@@ -402,6 +407,7 @@ viewSummary dimensions ({ thumbnail } as summary) =
         ]
 
 
+viewThumbnail : Dimensions -> Thumbnail -> Html Msg
 viewThumbnail dimensions thumbnail =
     div
         [ class "ContextCardThumbnail"
@@ -417,10 +423,12 @@ innerHtml html =
     attribute "inner-html" html
 
 
+px : Float -> String
 px n =
     String.fromFloat n ++ "px"
 
 
+styles : String
 styles =
     """
     @keyframes contextCardsFadeIn {
@@ -566,6 +574,7 @@ type Dir
     | RTL
 
 
+decodeSummary : Decoder Summary
 decodeSummary =
     D.map6 Summary
         (D.field "title" D.string)
@@ -576,6 +585,7 @@ decodeSummary =
         (D.field "dir" decodeDir)
 
 
+decodeThumbnail : Decoder Thumbnail
 decodeThumbnail =
     D.map3 Thumbnail
         (D.field "source" D.string)
@@ -583,6 +593,7 @@ decodeThumbnail =
         (D.field "height" D.float)
 
 
+decodeDir : Decoder Dir
 decodeDir =
     D.string
         |> D.andThen
@@ -599,6 +610,7 @@ decodeDir =
             )
 
 
+url : String -> String -> String
 url lang title =
     "https://" ++ lang ++ ".wikipedia.org/api/rest_v1/page/summary/" ++ title
 
