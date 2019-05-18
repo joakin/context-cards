@@ -79,7 +79,7 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case ( model, msg ) of
         ( Idle (Just _), IdleRemoveLastPreview ) ->
-            Idle Nothing |> noCmds
+            ( Idle Nothing, Cmd.none )
 
         ( _, LinkEnter link ) ->
             ( Active link ActiveLink Nothing, fetchTimeout link )
@@ -91,7 +91,7 @@ update msg model =
                 )
 
             else
-                model |> noCmds
+                ( model, Cmd.none )
 
         ( Active currentLink interactionStatus Nothing, SummaryResponse link response ) ->
             if currentLink.domElement == link.domElement then
@@ -123,56 +123,52 @@ update msg model =
                         ( Idle Nothing, log ("Request failed\n" ++ strErr) )
 
             else
-                model |> noCmds
+                ( model, Cmd.none )
 
         ( Active currentLink ActiveLink summary, LinkLeave link ) ->
             if currentLink.domElement == link.domElement then
                 ( Active link LeavingLink summary, abandonTimeout (LinkLeaveTimeout link) )
 
             else
-                model |> noCmds
+                ( model, Cmd.none )
 
         ( Active currentLink LeavingLink summary, LinkLeaveTimeout link ) ->
             if currentLink.domElement == link.domElement then
                 idle link summary
 
             else
-                model |> noCmds
+                ( model, Cmd.none )
 
         ( Active currentLink LeavingLink summary, PreviewEnter link ) ->
             if currentLink.domElement == link.domElement then
-                Active link ActivePreview summary |> noCmds
+                ( Active link ActivePreview summary, Cmd.none )
 
             else
-                model |> noCmds
+                ( model, Cmd.none )
 
         ( Active currentLink LeavingPreview summary, PreviewEnter link ) ->
             if currentLink.domElement == link.domElement then
-                Active link ActivePreview summary |> noCmds
+                ( Active link ActivePreview summary, Cmd.none )
 
             else
-                model |> noCmds
+                ( model, Cmd.none )
 
         ( Active currentLink ActivePreview summary, PreviewLeave link ) ->
             if currentLink.domElement == link.domElement then
                 ( Active link LeavingPreview summary, abandonTimeout (PreviewLeaveTimeout link) )
 
             else
-                model |> noCmds
+                ( model, Cmd.none )
 
         ( Active currentLink LeavingPreview summary, PreviewLeaveTimeout link ) ->
             if currentLink.domElement == link.domElement then
                 idle link summary
 
             else
-                model |> noCmds
+                ( model, Cmd.none )
 
         ( _, _ ) ->
-            model |> noCmds
-
-
-noCmds model =
-    ( model, Cmd.none )
+            ( model, Cmd.none )
 
 
 idle link maybeSummary =
