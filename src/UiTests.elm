@@ -12,6 +12,10 @@ testViewport =
     { width = 800.0, height = 600.0 }
 
 
+linkDimensions =
+    { width = 150.0, height = 24.0 }
+
+
 cards : List ( Link, Maybe Summary, Bool )
 cards =
     [ ( { lang = "en"
@@ -22,13 +26,19 @@ cards =
       )
     , ( { lang = "en"
         , title = "COLLISION RIGHT - Vorticist"
-        , linkPos = { x = 420, y = 10 }
+        , linkPos = { x = testViewport.width - linkDimensions.width - 10, y = 10 }
         }
       , vorticist
       )
     , ( { lang = "en"
         , title = "COLLISION BOTTOM - Vorticist"
-        , linkPos = { x = 10, y = 570 }
+        , linkPos = { x = 10, y = testViewport.height - linkDimensions.height - 10 }
+        }
+      , vorticist
+      )
+    , ( { lang = "en"
+        , title = "COLLISION BOTTOM RIGHT - Vorticist"
+        , linkPos = { x = testViewport.width - linkDimensions.width - 10, y = testViewport.height - linkDimensions.height - 10 }
         }
       , vorticist
       )
@@ -220,9 +230,6 @@ processCards =
                     , w = testViewport.width
                     , h = testViewport.height
                     }
-
-                ( w, h ) =
-                    ( 50.0, 18.0 )
             in
             ( { lang = partialLink.lang
               , title = partialLink.title
@@ -230,12 +237,12 @@ processCards =
               , rect =
                     { x = partialLink.linkPos.x
                     , y = partialLink.linkPos.y
-                    , width = w
-                    , height = h
+                    , width = linkDimensions.width
+                    , height = linkDimensions.height
                     , top = partialLink.linkPos.y
-                    , bottom = (viewport.y + viewport.h) - (viewport.y + partialLink.linkPos.y + h)
+                    , bottom = (viewport.y + viewport.h) - (viewport.y + partialLink.linkPos.y + linkDimensions.height)
                     , left = partialLink.linkPos.x
-                    , right = (viewport.x + viewport.w) - (viewport.x + partialLink.linkPos.x + w)
+                    , right = (viewport.x + viewport.w) - (viewport.x + partialLink.linkPos.x + linkDimensions.width)
                     }
               , viewport =
                     { scene =
@@ -285,7 +292,7 @@ viewIndex ( link, maybeSummary, dismissed ) =
         ]
         [ a
             [ href ("#" ++ link.title)
-            , style "color" "lightblue"
+            , style "color" "#005fc7"
             ]
             [ text link.title ]
         ]
@@ -299,8 +306,8 @@ viewViewport ( link, maybeSummary, dismissed ) =
         , style "left" (px link.viewport.viewport.x)
         , style "width" (px link.viewport.viewport.width)
         , style "height" (px link.viewport.viewport.height)
-        , style "background-color" "#f3f3ff"
-        , style "box-shadow" "0px 5px 20px rgba(0,0,0,0.1)"
+        , style "background-color" "white"
+        , style "box-shadow" "0px 2px 2px rgba(0,0,0,0.1)"
         ]
         [ a
             [ id link.title
@@ -320,8 +327,9 @@ viewViewport ( link, maybeSummary, dismissed ) =
             , style "left" (px link.rect.left)
             , style "width" (px link.rect.width)
             , style "height" (px link.rect.height)
-            , style "background-color" "#fff3e3"
+            , style "background-color" "#ffd5d5"
             , style "box-shadow" "0px 5px 20px rgba(0,0,0,0.1)"
+            , style "border-radius" "3px"
             ]
             []
         ]
