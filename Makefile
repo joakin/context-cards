@@ -1,4 +1,4 @@
-.PHONY=all dist dev watch clean
+.PHONY=all dist dev watch clean deploy
 
 default: dist
 
@@ -40,3 +40,5 @@ all: $(JSFILE) $(JSUITESTFILE)
 watch:
 	@find src -name '*.elm' -or -name '*.js' | entr $(MAKE) dev
 
+deploy: clean dist
+	./node_modules/.bin/gh-pages -d $(OUTFOLDER)
