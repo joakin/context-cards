@@ -3851,6 +3851,7 @@ function _VirtualDom_dekey(keyedNode)
 	};
 }var author$project$Card$styles = '\n    @keyframes contextCardsFadeIn {\n        from {\n            opacity: 0;\n            transform: translate3d(0, 50%, 0);\n        }\n\n        to {\n            opacity: 1;\n            transform: translate3d(0, 0, 0);\n        }\n    }\n    @keyframes contextCardsFadeOut {\n        from {\n            opacity: 1;\n            transform: translate3d(0, 0, 0);\n        }\n\n        to {\n            opacity: 0;\n            transform: translate3d(0, 50%, 0);\n        }\n    }\n    .ContextCard, .ContextCard * {\n        box-sizing: border-box;\n    }\n\n    .ContextCard {\n        position: absolute;\n        z-index: 10000;\n        background-color: white;\n        box-shadow: 0 30px 90px -20px rgba( 0, 0, 0, 0.3 ), 0 0 1px #a2a9b1;\n        animation-name: contextCardsFadeIn;\n        animation-duration: 300ms;\n        animation-fill-mode: both;\n        border-radius: 2px;\n        overflow: hidden;\n    }\n    .ContextCard.ContextCardDismissed {\n        animation-name: contextCardsFadeOut;\n        pointer-events: none;\n    }\n    .ContextCardLogo {\n        height: 15px;\n    }\n    .ContextCardSummary {\n        display: flex;\n    }\n    .ContextCardExtract {\n        padding: 1em;\n        overflow: hidden;\n        position: relative;\n        font-size: 14px;\n        line-height: 1.4;\n    }\n    .ContextCardExtract p {\n        margin: 0.4em 0;\n    }\n    .ContextCardExtract:before, .ContextCardExtract:after {\n        content: \'\';\n        display: block;\n        background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 80%), linear-gradient(to bottom right, rgba(255, 255, 255, 0) 80%, rgba(255, 255, 255, 1) 100%);\n        position: absolute;\n        bottom: 0px;\n        left: 1px;\n        right: 1px;\n        height: 3em;\n    }\n    .ContextCardThumbnail {\n        flex-shrink: 0;\n        background-position: center center;\n        background-size: 110%;\n        box-shadow: 0 0 1px #a2a9b1;\n    }\n    ';
 var author$project$UiTests$ezraPound = '{"type":"standard","title":"Ezra Pound","displaytitle":"Ezra Pound","namespace":{"id":0,"text":""},"wikibase_item":"Q163366","titles":{"canonical":"Ezra_Pound","normalized":"Ezra Pound","display":"Ezra Pound"},"pageid":44203,"thumbnail":{"source":"https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Lustra_%28private_print%29_-_Ezra_Pound_-_Frontispiece.jpg/247px-Lustra_%28private_print%29_-_Ezra_Pound_-_Frontispiece.jpg","width":247,"height":320},"originalimage":{"source":"https://upload.wikimedia.org/wikipedia/commons/6/66/Lustra_%28private_print%29_-_Ezra_Pound_-_Frontispiece.jpg","width":1816,"height":2354},"lang":"en","dir":"ltr","revision":"894790083","tid":"23444730-775a-11e9-abf2-9a9f3bb9b478","timestamp":"2019-04-30T01:23:18Z","description":"American poet and critic","content_urls":{"desktop":{"page":"https://en.wikipedia.org/wiki/Ezra_Pound","revisions":"https://en.wikipedia.org/wiki/Ezra_Pound?action=history","edit":"https://en.wikipedia.org/wiki/Ezra_Pound?action=edit","talk":"https://en.wikipedia.org/wiki/Talk:Ezra_Pound"},"mobile":{"page":"https://en.m.wikipedia.org/wiki/Ezra_Pound","revisions":"https://en.m.wikipedia.org/wiki/Special:History/Ezra_Pound","edit":"https://en.m.wikipedia.org/wiki/Ezra_Pound?action=edit","talk":"https://en.m.wikipedia.org/wiki/Talk:Ezra_Pound"}},"api_urls":{"summary":"https://en.wikipedia.org/api/rest_v1/page/summary/Ezra_Pound","metadata":"https://en.wikipedia.org/api/rest_v1/page/metadata/Ezra_Pound","references":"https://en.wikipedia.org/api/rest_v1/page/references/Ezra_Pound","media":"https://en.wikipedia.org/api/rest_v1/page/media/Ezra_Pound","edit_html":"https://en.wikipedia.org/api/rest_v1/page/html/Ezra_Pound","talk_page_html":"https://en.wikipedia.org/api/rest_v1/page/html/Talk:Ezra_Pound"},"extract":"Ezra Weston Loomis Pound was an expatriate American poet and critic, and a major figure in the early modernist poetry movement. His contribution to poetry began with his development of Imagism, a movement derived from classical Chinese and Japanese poetry, stressing clarity, precision and economy of language. His works include Ripostes (1912), Hugh Selwyn Mauberley (1920) and the unfinished 120-section epic, The Cantos (1917–1969).","extract_html":"<p><b>Ezra Weston Loomis Pound</b> was an expatriate American poet and critic, and a major figure in the early modernist poetry movement. His contribution to poetry began with his development of Imagism, a movement derived from classical Chinese and Japanese poetry, stressing clarity, precision and economy of language. His works include <i>Ripostes</i> (1912), <i>Hugh Selwyn Mauberley</i> (1920) and the unfinished 120-section epic, <i>The Cantos</i> (1917–1969).</p>"}';
+var author$project$UiTests$heWiki1 = '{"type":"standard","title":"פרהיסטוריה","displaytitle":"פרהיסטוריה","namespace":{"id":0,"text":""},"wikibase_item":"Q11756","titles":{"canonical":"פרהיסטוריה","normalized":"פרהיסטוריה","display":"פרהיסטוריה"},"pageid":502723,"thumbnail":{"source":"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Stonehenge2007_07_30.jpg/320px-Stonehenge2007_07_30.jpg","width":320,"height":240},"originalimage":{"source":"https://upload.wikimedia.org/wikipedia/commons/3/3c/Stonehenge2007_07_30.jpg","width":2816,"height":2112},"lang":"he","dir":"rtl","revision":"25264157","tid":"9a686330-71c1-11e9-b5da-d46876899b7b","timestamp":"2019-04-10T11:37:20Z","description":"התקופה הקדומה","content_urls":{"desktop":{"page":"https://he.wikipedia.org/wiki/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94","revisions":"https://he.wikipedia.org/wiki/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94?action=history","edit":"https://he.wikipedia.org/wiki/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94?action=edit","talk":"https://he.wikipedia.org/wiki/%D7%A9%D7%99%D7%97%D7%94:%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94"},"mobile":{"page":"https://he.m.wikipedia.org/wiki/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94","revisions":"https://he.m.wikipedia.org/wiki/Special:History/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94","edit":"https://he.m.wikipedia.org/wiki/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94?action=edit","talk":"https://he.m.wikipedia.org/wiki/%D7%A9%D7%99%D7%97%D7%94:%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94"}},"api_urls":{"summary":"https://he.wikipedia.org/api/rest_v1/page/summary/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94","metadata":"https://he.wikipedia.org/api/rest_v1/page/metadata/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94","references":"https://he.wikipedia.org/api/rest_v1/page/references/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94","media":"https://he.wikipedia.org/api/rest_v1/page/media/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94","edit_html":"https://he.wikipedia.org/api/rest_v1/page/html/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94","talk_page_html":"https://he.wikipedia.org/api/rest_v1/page/html/%D7%A9%D7%99%D7%97%D7%94:%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94"},"extract":"פרהיסטוריה מלטינית præ (לפני) ומיוונית Iστορία (היסטוריה), היא התקופה בתולדות האנושות שקדמה להיסטוריה, דהיינו להופעת התעודות הכתובות. התקופה הפרהיסטורית מתחילה עם הופעת הסוג אדם באפריקה, לפני כשניים וחצי מיליוני שנים, ומסתיימת לפני כמה אלפי עד מאות שנים, כאשר החל השימוש בכתב. לפיכך, התקופה הפרהיסטורית מכסה את הרוב המכריע של תולדות האנושות, ממנו אין כל תיעוד כתוב. מקור המידע החשוב ביותר על התקופה הוא ממצאים ארכאולוגיים, בעיקר כלים, שרידי מבנים ואשפת מזון של האדם, וכן שרידי שלד מאובנים של האדם עצמו.","extract_html":"<p><b>פרהיסטוריה</b> מלטינית præ (לפני) ומיוונית Iστορία (היסטוריה), היא התקופה בתולדות האנושות שקדמה להיסטוריה, דהיינו להופעת התעודות הכתובות. התקופה הפרהיסטורית מתחילה עם הופעת הסוג אדם באפריקה, לפני כשניים וחצי מיליוני שנים, ומסתיימת לפני כמה אלפי עד מאות שנים, כאשר החל השימוש בכתב. לפיכך, התקופה הפרהיסטורית מכסה את הרוב המכריע של תולדות האנושות, ממנו אין כל תיעוד כתוב. מקור המידע החשוב ביותר על התקופה הוא ממצאים ארכאולוגיים, בעיקר כלים, שרידי מבנים ואשפת מזון של האדם, וכן שרידי שלד מאובנים של האדם עצמו.</p>"}';
 var author$project$UiTests$linkDimensions = {height: 24.0, width: 150.0};
 var author$project$Data$Summary = F6(
 	function (title, displayTitle, contentHtml, contentText, thumbnail, dir) {
@@ -4444,21 +4445,21 @@ var author$project$UiTests$cards = author$project$UiTests$processCards(
 			},
 			author$project$UiTests$vorticist),
 			_Utils_Tuple3(
-			'COLLISION BOTTOM',
+			'RTL',
 			{
-				lang: 'en',
-				linkPos: {x: 10, y: (author$project$UiTests$testViewport.height - author$project$UiTests$linkDimensions.height) - 10},
-				title: 'Vorticist'
+				lang: 'he',
+				linkPos: {x: (author$project$UiTests$testViewport.width - author$project$UiTests$linkDimensions.width) - 10, y: 10},
+				title: 'פרהיסטוריה'
 			},
-			author$project$UiTests$vorticist),
+			author$project$UiTests$heWiki1),
 			_Utils_Tuple3(
-			'COLLISION BOTTOM RIGHT',
+			'RTL COLLISION LEFT',
 			{
-				lang: 'en',
-				linkPos: {x: (author$project$UiTests$testViewport.width - author$project$UiTests$linkDimensions.width) - 10, y: (author$project$UiTests$testViewport.height - author$project$UiTests$linkDimensions.height) - 10},
-				title: 'Vorticist'
+				lang: 'he',
+				linkPos: {x: 10, y: 10},
+				title: 'פרהיסטוריה'
 			},
-			author$project$UiTests$vorticist),
+			author$project$UiTests$heWiki1),
 			_Utils_Tuple3(
 			'THIN IMAGE',
 			{
@@ -4594,7 +4595,7 @@ var author$project$UiTests$cards = author$project$UiTests$processCards(
 				linkPos: {x: 10, y: 10},
 				title: 'פרהיסטוריה'
 			},
-			'{"type":"standard","title":"פרהיסטוריה","displaytitle":"פרהיסטוריה","namespace":{"id":0,"text":""},"wikibase_item":"Q11756","titles":{"canonical":"פרהיסטוריה","normalized":"פרהיסטוריה","display":"פרהיסטוריה"},"pageid":502723,"thumbnail":{"source":"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Stonehenge2007_07_30.jpg/320px-Stonehenge2007_07_30.jpg","width":320,"height":240},"originalimage":{"source":"https://upload.wikimedia.org/wikipedia/commons/3/3c/Stonehenge2007_07_30.jpg","width":2816,"height":2112},"lang":"he","dir":"rtl","revision":"25264157","tid":"9a686330-71c1-11e9-b5da-d46876899b7b","timestamp":"2019-04-10T11:37:20Z","description":"התקופה הקדומה","content_urls":{"desktop":{"page":"https://he.wikipedia.org/wiki/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94","revisions":"https://he.wikipedia.org/wiki/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94?action=history","edit":"https://he.wikipedia.org/wiki/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94?action=edit","talk":"https://he.wikipedia.org/wiki/%D7%A9%D7%99%D7%97%D7%94:%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94"},"mobile":{"page":"https://he.m.wikipedia.org/wiki/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94","revisions":"https://he.m.wikipedia.org/wiki/Special:History/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94","edit":"https://he.m.wikipedia.org/wiki/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94?action=edit","talk":"https://he.m.wikipedia.org/wiki/%D7%A9%D7%99%D7%97%D7%94:%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94"}},"api_urls":{"summary":"https://he.wikipedia.org/api/rest_v1/page/summary/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94","metadata":"https://he.wikipedia.org/api/rest_v1/page/metadata/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94","references":"https://he.wikipedia.org/api/rest_v1/page/references/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94","media":"https://he.wikipedia.org/api/rest_v1/page/media/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94","edit_html":"https://he.wikipedia.org/api/rest_v1/page/html/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94","talk_page_html":"https://he.wikipedia.org/api/rest_v1/page/html/%D7%A9%D7%99%D7%97%D7%94:%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94"},"extract":"פרהיסטוריה מלטינית præ (לפני) ומיוונית Iστορία (היסטוריה), היא התקופה בתולדות האנושות שקדמה להיסטוריה, דהיינו להופעת התעודות הכתובות. התקופה הפרהיסטורית מתחילה עם הופעת הסוג אדם באפריקה, לפני כשניים וחצי מיליוני שנים, ומסתיימת לפני כמה אלפי עד מאות שנים, כאשר החל השימוש בכתב. לפיכך, התקופה הפרהיסטורית מכסה את הרוב המכריע של תולדות האנושות, ממנו אין כל תיעוד כתוב. מקור המידע החשוב ביותר על התקופה הוא ממצאים ארכאולוגיים, בעיקר כלים, שרידי מבנים ואשפת מזון של האדם, וכן שרידי שלד מאובנים של האדם עצמו.","extract_html":"<p><b>פרהיסטוריה</b> מלטינית præ (לפני) ומיוונית Iστορία (היסטוריה), היא התקופה בתולדות האנושות שקדמה להיסטוריה, דהיינו להופעת התעודות הכתובות. התקופה הפרהיסטורית מתחילה עם הופעת הסוג אדם באפריקה, לפני כשניים וחצי מיליוני שנים, ומסתיימת לפני כמה אלפי עד מאות שנים, כאשר החל השימוש בכתב. לפיכך, התקופה הפרהיסטורית מכסה את הרוב המכריע של תולדות האנושות, ממנו אין כל תיעוד כתוב. מקור המידע החשוב ביותר על התקופה הוא ממצאים ארכאולוגיים, בעיקר כלים, שרידי מבנים ואשפת מזון של האדם, וכן שרידי שלד מאובנים של האדם עצמו.</p>"}'),
+			author$project$UiTests$heWiki1),
 			_Utils_Tuple3(
 			'HE_WIKI2',
 			{
@@ -4692,6 +4693,10 @@ var author$project$Card$Vertical = {$: 'Vertical'};
 var author$project$Card$px = function (n) {
 	return elm$core$String$fromFloat(n) + 'px';
 };
+var elm$core$Basics$min = F2(
+	function (x, y) {
+		return (_Utils_cmp(x, y) < 0) ? x : y;
+	});
 var elm$core$Maybe$map = F2(
 	function (f, maybe) {
 		if (maybe.$ === 'Just') {
@@ -4716,8 +4721,7 @@ var author$project$Card$getDimensions = F3(
 		var viewport = _n0.viewport;
 		var thumbnail = summary.thumbnail;
 		var verticalPreviewWidth = 320;
-		var topPosition = (linkRect.top + viewport.y) + linkRect.height;
-		var leftPosition = linkRect.left + viewport.x;
+		var verticalExtractMaxHeight = 190;
 		var isHorizontalPreview = A2(
 			elm$core$Maybe$withDefault,
 			true,
@@ -4739,7 +4743,7 @@ var author$project$Card$getDimensions = F3(
 		}();
 		var extractWidth = isHorizontalPreview ? (hasThumbnail ? 260 : 320) : verticalPreviewWidth;
 		var extractOrder = isHorizontalPreview ? 0 : 1;
-		var extractMaxHeight = isHorizontalPreview ? '100%' : author$project$Card$px(190);
+		var extractMaxHeight = isHorizontalPreview ? '100%' : author$project$Card$px(verticalExtractMaxHeight);
 		var constrainedSize = isHorizontalPreview ? {styleAttr: 'max-height', value: horizontalPreviewHeight} : {styleAttr: 'max-width', value: verticalPreviewWidth};
 		var _n1 = function () {
 			if (thumbnail.$ === 'Just') {
@@ -4754,6 +4758,21 @@ var author$project$Card$getDimensions = F3(
 		var _n3 = isHorizontalPreview ? _Utils_Tuple2(thumbnailOtherDimension, thumbnailMaxSize) : _Utils_Tuple2(thumbnailMaxSize, thumbnailOtherDimension);
 		var thumbnailWidth = _n3.a;
 		var thumbnailHeight = _n3.b;
+		var _n4 = isHorizontalPreview ? _Utils_Tuple2(extractWidth + thumbnailWidth, horizontalPreviewHeight) : _Utils_Tuple2(verticalPreviewWidth, verticalExtractMaxHeight + thumbnailHeight);
+		var maxWidth = _n4.a;
+		var maxHeight = _n4.b;
+		var _n5 = _Utils_Tuple2(
+			(linkRect.top + viewport.y) + linkRect.height,
+			function () {
+				var _n6 = summary.dir;
+				if (_n6.$ === 'LTR') {
+					return A2(elm$core$Basics$min, linkRect.left + viewport.x, (viewport.x + viewport.width) - maxWidth);
+				} else {
+					return A2(elm$core$Basics$max, (linkRect.left + viewport.x) - (maxWidth - linkRect.width), viewport.x);
+				}
+			}());
+		var topPosition = _n5.a;
+		var leftPosition = _n5.b;
 		return {constrainedSize: constrainedSize, extractMaxHeight: extractMaxHeight, extractOrder: extractOrder, extractWidth: extractWidth, kind: kind, left: leftPosition, thumbnailHeight: thumbnailHeight, thumbnailWidth: thumbnailWidth, top: topPosition};
 	});
 var elm$core$Basics$identity = function (x) {
