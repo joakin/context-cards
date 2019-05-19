@@ -93,12 +93,12 @@ update msg model =
             else
                 ( model, Cmd.none )
 
-        ( Active currentLink LeavingPreview summary, HoverIn link ) ->
+        ( Active currentLink interaction summary, HoverIn link ) ->
             if currentLink.domElement == link.domElement then
-                ( Active link OnPreview summary, Cmd.none )
+                ( Active currentLink OnPreview summary, Cmd.none )
 
             else
-                ( model, Cmd.none )
+                ( Active link OnPreview Nothing, fetchTimeout link )
 
         ( Idle (Just ( oldLink, summary )), HoverIn link ) ->
             if oldLink.domElement == link.domElement then
@@ -107,7 +107,7 @@ update msg model =
             else
                 ( Active link OnPreview Nothing, fetchTimeout link )
 
-        ( _, HoverIn link ) ->
+        ( Idle Nothing, HoverIn link ) ->
             ( Active link OnPreview Nothing, fetchTimeout link )
 
         ( _, _ ) ->

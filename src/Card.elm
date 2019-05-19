@@ -60,18 +60,27 @@ view events link maybeSummary dismissed =
             let
                 dimensions =
                     getDimensions link.rect link.viewport summary
+
+                eventAttrs =
+                    if dismissed then
+                        []
+
+                    else
+                        [ onMouseEnter (events.mouseEnter link)
+                        , onMouseLeave (events.mouseLeave link)
+                        ]
             in
             div
-                [ classList
+                ([ classList
                     [ ( "ContextCard", True )
                     , ( "ContextCardDismissed", dismissed )
                     ]
-                , dir <| dirToString summary.dir
-                , style "top" (px dimensions.top)
-                , style "left" (px dimensions.left)
-                , onMouseEnter (events.mouseEnter link)
-                , onMouseLeave (events.mouseLeave link)
-                ]
+                 , dir <| dirToString summary.dir
+                 , style "top" (px dimensions.top)
+                 , style "left" (px dimensions.left)
+                 ]
+                    ++ eventAttrs
+                )
                 [ L.lazy3 viewSummary link dimensions summary ]
 
         Nothing ->
