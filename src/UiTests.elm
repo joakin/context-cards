@@ -32,20 +32,50 @@ cards =
         }
       , vorticist
       )
-    , ( "COLLISION BOTTOM"
-      , { lang = "en"
-        , title = "Vorticist"
-        , linkPos = { x = 10, y = testViewport.height - linkDimensions.height - 10 }
+
+    -- , ( "COLLISION BOTTOM"
+    --   , { lang = "en"
+    --     , title = "Vorticist"
+    --     , linkPos = { x = 10, y = testViewport.height - linkDimensions.height - 10 }
+    --     }
+    --   , vorticist
+    --   )
+    -- , ( "COLLISION BOTTOM RIGHT"
+    --   , { lang = "en"
+    --     , title = "Vorticist"
+    --     , linkPos = { x = testViewport.width - linkDimensions.width - 10, y = testViewport.height - linkDimensions.height - 10 }
+    --     }
+    --   , vorticist
+    --   )
+    , ( "RTL"
+      , { lang = "he"
+        , title = "פרהיסטוריה"
+        , linkPos = { x = testViewport.width - linkDimensions.width - 10, y = 10 }
         }
-      , vorticist
+      , heWiki1
       )
-    , ( "COLLISION BOTTOM RIGHT"
-      , { lang = "en"
-        , title = "Vorticist"
-        , linkPos = { x = testViewport.width - linkDimensions.width - 10, y = testViewport.height - linkDimensions.height - 10 }
+    , ( "RTL COLLISION LEFT"
+      , { lang = "he"
+        , title = "פרהיסטוריה"
+        , linkPos = { x = 10, y = 10 }
         }
-      , vorticist
+      , heWiki1
       )
+
+    -- , ( "RTL COLLISION BOTTOM"
+    --   , { lang = "he"
+    --     , title = "פרהיסטוריה"
+    --     , linkPos = { x = testViewport.width - linkDimensions.width - 10, y = testViewport.height - linkDimensions.height - 10 }
+    --     }
+    --   , heWiki1
+    --   )
+    -- , ( "RTL COLLISION BOTTOM LEFT"
+    --   , { lang = "he"
+    --     , title = "פרהיסטוריה"
+    --     , linkPos = { x = 10, y = testViewport.height - linkDimensions.height - 10 }
+    --     }
+    --   , heWiki1
+    --   )
     , ( "THIN IMAGE"
       , { lang = "en"
         , title = "Ezra Pound"
@@ -163,7 +193,7 @@ cards =
         , title = "פרהיסטוריה"
         , linkPos = { x = 10, y = 10 }
         }
-      , """{"type":"standard","title":"פרהיסטוריה","displaytitle":"פרהיסטוריה","namespace":{"id":0,"text":""},"wikibase_item":"Q11756","titles":{"canonical":"פרהיסטוריה","normalized":"פרהיסטוריה","display":"פרהיסטוריה"},"pageid":502723,"thumbnail":{"source":"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Stonehenge2007_07_30.jpg/320px-Stonehenge2007_07_30.jpg","width":320,"height":240},"originalimage":{"source":"https://upload.wikimedia.org/wikipedia/commons/3/3c/Stonehenge2007_07_30.jpg","width":2816,"height":2112},"lang":"he","dir":"rtl","revision":"25264157","tid":"9a686330-71c1-11e9-b5da-d46876899b7b","timestamp":"2019-04-10T11:37:20Z","description":"התקופה הקדומה","content_urls":{"desktop":{"page":"https://he.wikipedia.org/wiki/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94","revisions":"https://he.wikipedia.org/wiki/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94?action=history","edit":"https://he.wikipedia.org/wiki/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94?action=edit","talk":"https://he.wikipedia.org/wiki/%D7%A9%D7%99%D7%97%D7%94:%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94"},"mobile":{"page":"https://he.m.wikipedia.org/wiki/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94","revisions":"https://he.m.wikipedia.org/wiki/Special:History/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94","edit":"https://he.m.wikipedia.org/wiki/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94?action=edit","talk":"https://he.m.wikipedia.org/wiki/%D7%A9%D7%99%D7%97%D7%94:%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94"}},"api_urls":{"summary":"https://he.wikipedia.org/api/rest_v1/page/summary/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94","metadata":"https://he.wikipedia.org/api/rest_v1/page/metadata/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94","references":"https://he.wikipedia.org/api/rest_v1/page/references/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94","media":"https://he.wikipedia.org/api/rest_v1/page/media/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94","edit_html":"https://he.wikipedia.org/api/rest_v1/page/html/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94","talk_page_html":"https://he.wikipedia.org/api/rest_v1/page/html/%D7%A9%D7%99%D7%97%D7%94:%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94"},"extract":"פרהיסטוריה מלטינית præ (לפני) ומיוונית Iστορία (היסטוריה), היא התקופה בתולדות האנושות שקדמה להיסטוריה, דהיינו להופעת התעודות הכתובות. התקופה הפרהיסטורית מתחילה עם הופעת הסוג אדם באפריקה, לפני כשניים וחצי מיליוני שנים, ומסתיימת לפני כמה אלפי עד מאות שנים, כאשר החל השימוש בכתב. לפיכך, התקופה הפרהיסטורית מכסה את הרוב המכריע של תולדות האנושות, ממנו אין כל תיעוד כתוב. מקור המידע החשוב ביותר על התקופה הוא ממצאים ארכאולוגיים, בעיקר כלים, שרידי מבנים ואשפת מזון של האדם, וכן שרידי שלד מאובנים של האדם עצמו.","extract_html":"<p><b>פרהיסטוריה</b> מלטינית præ (לפני) ומיוונית Iστορία (היסטוריה), היא התקופה בתולדות האנושות שקדמה להיסטוריה, דהיינו להופעת התעודות הכתובות. התקופה הפרהיסטורית מתחילה עם הופעת הסוג אדם באפריקה, לפני כשניים וחצי מיליוני שנים, ומסתיימת לפני כמה אלפי עד מאות שנים, כאשר החל השימוש בכתב. לפיכך, התקופה הפרהיסטורית מכסה את הרוב המכריע של תולדות האנושות, ממנו אין כל תיעוד כתוב. מקור המידע החשוב ביותר על התקופה הוא ממצאים ארכאולוגיים, בעיקר כלים, שרידי מבנים ואשפת מזון של האדם, וכן שרידי שלד מאובנים של האדם עצמו.</p>"}"""
+      , heWiki1
       )
     , ( "HE_WIKI2"
       , { lang = "he"
@@ -399,3 +429,7 @@ southGeorgiaAndTheSouthSandwichIslands =
 -}
 foreignRelationsOfTransnistria =
     """{"type":"standard","title":"Foreign relations of Transnistria","displaytitle":"Foreign relations of Transnistria","namespace":{"id":0,"text":""},"wikibase_item":"Q4113721","titles":{"canonical":"Foreign_relations_of_Transnistria","normalized":"Foreign relations of Transnistria","display":"Foreign relations of Transnistria"},"pageid":11971493,"thumbnail":{"source":"https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Coat_of_arms_of_Transnistria.svg/297px-Coat_of_arms_of_Transnistria.svg.png","width":297,"height":320},"originalimage":{"source":"https://upload.wikimedia.org/wikipedia/commons/8/81/Coat_of_arms_of_Transnistria.svg","width":383,"height":413},"lang":"en","dir":"ltr","revision":"868166293","tid":"cd206e60-5e9a-11e9-88d4-6e6e5bf0566a","timestamp":"2018-11-10T12:15:37Z","content_urls":{"desktop":{"page":"https://en.wikipedia.org/wiki/Foreign_relations_of_Transnistria","revisions":"https://en.wikipedia.org/wiki/Foreign_relations_of_Transnistria?action=history","edit":"https://en.wikipedia.org/wiki/Foreign_relations_of_Transnistria?action=edit","talk":"https://en.wikipedia.org/wiki/Talk:Foreign_relations_of_Transnistria"},"mobile":{"page":"https://en.m.wikipedia.org/wiki/Foreign_relations_of_Transnistria","revisions":"https://en.m.wikipedia.org/wiki/Special:History/Foreign_relations_of_Transnistria","edit":"https://en.m.wikipedia.org/wiki/Foreign_relations_of_Transnistria?action=edit","talk":"https://en.m.wikipedia.org/wiki/Talk:Foreign_relations_of_Transnistria"}},"api_urls":{"summary":"https://en.wikipedia.org/api/rest_v1/page/summary/Foreign_relations_of_Transnistria","metadata":"https://en.wikipedia.org/api/rest_v1/page/metadata/Foreign_relations_of_Transnistria","references":"https://en.wikipedia.org/api/rest_v1/page/references/Foreign_relations_of_Transnistria","media":"https://en.wikipedia.org/api/rest_v1/page/media/Foreign_relations_of_Transnistria","edit_html":"https://en.wikipedia.org/api/rest_v1/page/html/Foreign_relations_of_Transnistria","talk_page_html":"https://en.wikipedia.org/api/rest_v1/page/html/Talk:Foreign_relations_of_Transnistria"},"extract":"The Transnistrian republic is recognized by three states with limited recognition, and is a member of one international organization, the Community for Democracy and Human Rights, that was established by these four states.","extract_html":"<p>The Transnistrian republic is recognized by three states with limited recognition, and is a member of one international organization, the Community for Democracy and Human Rights, that was established by these four states.</p>"}"""
+
+
+heWiki1 =
+    """{"type":"standard","title":"פרהיסטוריה","displaytitle":"פרהיסטוריה","namespace":{"id":0,"text":""},"wikibase_item":"Q11756","titles":{"canonical":"פרהיסטוריה","normalized":"פרהיסטוריה","display":"פרהיסטוריה"},"pageid":502723,"thumbnail":{"source":"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Stonehenge2007_07_30.jpg/320px-Stonehenge2007_07_30.jpg","width":320,"height":240},"originalimage":{"source":"https://upload.wikimedia.org/wikipedia/commons/3/3c/Stonehenge2007_07_30.jpg","width":2816,"height":2112},"lang":"he","dir":"rtl","revision":"25264157","tid":"9a686330-71c1-11e9-b5da-d46876899b7b","timestamp":"2019-04-10T11:37:20Z","description":"התקופה הקדומה","content_urls":{"desktop":{"page":"https://he.wikipedia.org/wiki/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94","revisions":"https://he.wikipedia.org/wiki/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94?action=history","edit":"https://he.wikipedia.org/wiki/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94?action=edit","talk":"https://he.wikipedia.org/wiki/%D7%A9%D7%99%D7%97%D7%94:%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94"},"mobile":{"page":"https://he.m.wikipedia.org/wiki/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94","revisions":"https://he.m.wikipedia.org/wiki/Special:History/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94","edit":"https://he.m.wikipedia.org/wiki/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94?action=edit","talk":"https://he.m.wikipedia.org/wiki/%D7%A9%D7%99%D7%97%D7%94:%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94"}},"api_urls":{"summary":"https://he.wikipedia.org/api/rest_v1/page/summary/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94","metadata":"https://he.wikipedia.org/api/rest_v1/page/metadata/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94","references":"https://he.wikipedia.org/api/rest_v1/page/references/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94","media":"https://he.wikipedia.org/api/rest_v1/page/media/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94","edit_html":"https://he.wikipedia.org/api/rest_v1/page/html/%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94","talk_page_html":"https://he.wikipedia.org/api/rest_v1/page/html/%D7%A9%D7%99%D7%97%D7%94:%D7%A4%D7%A8%D7%94%D7%99%D7%A1%D7%98%D7%95%D7%A8%D7%99%D7%94"},"extract":"פרהיסטוריה מלטינית præ (לפני) ומיוונית Iστορία (היסטוריה), היא התקופה בתולדות האנושות שקדמה להיסטוריה, דהיינו להופעת התעודות הכתובות. התקופה הפרהיסטורית מתחילה עם הופעת הסוג אדם באפריקה, לפני כשניים וחצי מיליוני שנים, ומסתיימת לפני כמה אלפי עד מאות שנים, כאשר החל השימוש בכתב. לפיכך, התקופה הפרהיסטורית מכסה את הרוב המכריע של תולדות האנושות, ממנו אין כל תיעוד כתוב. מקור המידע החשוב ביותר על התקופה הוא ממצאים ארכאולוגיים, בעיקר כלים, שרידי מבנים ואשפת מזון של האדם, וכן שרידי שלד מאובנים של האדם עצמו.","extract_html":"<p><b>פרהיסטוריה</b> מלטינית præ (לפני) ומיוונית Iστορία (היסטוריה), היא התקופה בתולדות האנושות שקדמה להיסטוריה, דהיינו להופעת התעודות הכתובות. התקופה הפרהיסטורית מתחילה עם הופעת הסוג אדם באפריקה, לפני כשניים וחצי מיליוני שנים, ומסתיימת לפני כמה אלפי עד מאות שנים, כאשר החל השימוש בכתב. לפיכך, התקופה הפרהיסטורית מכסה את הרוב המכריע של תולדות האנושות, ממנו אין כל תיעוד כתוב. מקור המידע החשוב ביותר על התקופה הוא ממצאים ארכאולוגיים, בעיקר כלים, שרידי מבנים ואשפת מזון של האדם, וכן שרידי שלד מאובנים של האדם עצמו.</p>"}"""

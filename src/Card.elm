@@ -272,16 +272,16 @@ getDimensions linkRect { viewport } ({ thumbnail } as summary) =
                 ( verticalPreviewWidth, verticalExtractMaxHeight + thumbnailHeight )
 
         ( topPosition, leftPosition ) =
-            case summary.dir of
+            ( linkRect.top + viewport.y + linkRect.height
+            , case summary.dir of
                 LTR ->
-                    ( linkRect.top + viewport.y + linkRect.height
-                    , linkRect.left + viewport.x
-                    )
+                    min (linkRect.left + viewport.x)
+                        (viewport.x + viewport.width - maxWidth)
 
                 RTL ->
-                    ( linkRect.top + viewport.y + linkRect.height
-                    , linkRect.left + viewport.x - (maxWidth - linkRect.width)
-                    )
+                    max (linkRect.left + viewport.x - (maxWidth - linkRect.width))
+                        viewport.x
+            )
     in
     { kind = kind
     , top = topPosition
