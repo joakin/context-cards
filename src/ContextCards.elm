@@ -67,9 +67,7 @@ update msg model =
             if currentLink.domElement == link.domElement then
                 case response of
                     Ok summary ->
-                        ( Active link interactionStatus (Just summary)
-                        , renderHTML ()
-                        )
+                        ( Active link interactionStatus (Just summary), renderHTML () )
 
                     Err err ->
                         ( Idle Nothing, log ("Request failed\n" ++ requestErrorToString err) )
@@ -84,42 +82,36 @@ update msg model =
             else
                 ( model, Cmd.none )
 
-        ( Active currentLink LeavingPreview summary, HoverOutEnd link ) ->
-            idle currentLink link summary model
+        ( Active currentLink LeavingPreview maybeSummary, HoverOutEnd link ) ->
+            if currentLink.domElement == link.domElement then
+                ( maybeSummary
+                    |> Maybe.map (\summary -> Idle (Just ( link, summary )))
+                    |> Maybe.withDefault (Idle Nothing)
+                , Cmd.none
+                )
+
+            else
+                ( model, Cmd.none )
 
         ( Active currentLink LeavingPreview summary, HoverIn link ) ->
-            activePreviewIfCurrentLink currentLink link summary model
+            if currentLink.domElement == link.domElement then
+                ( Active link OnPreview summary, Cmd.none )
+
+            else
+                ( model, Cmd.none )
+
+        ( Idle (Just ( oldLink, summary )), HoverIn link ) ->
+            if oldLink.domElement == link.domElement then
+                ( Active link OnPreview (Just summary), renderHTML () )
+
+            else
+                ( Active link OnPreview Nothing, fetchTimeout link )
 
         ( _, HoverIn link ) ->
             ( Active link OnPreview Nothing, fetchTimeout link )
 
         ( _, _ ) ->
             ( model, Cmd.none )
-
-
-activePreviewIfCurrentLink : Link -> Link -> Maybe Summary -> Model -> ( Model, Cmd Msg )
-activePreviewIfCurrentLink currentLink msgLink summary model =
-    if currentLink.domElement == msgLink.domElement then
-        ( Active msgLink OnPreview summary, Cmd.none )
-
-    else
-        ( model, Cmd.none )
-
-
-idle : Link -> Link -> Maybe Summary -> Model -> ( Model, Cmd Msg )
-idle currentLink msgLink maybeSummary model =
-    if currentLink.domElement == msgLink.domElement then
-        case maybeSummary of
-            Just summary ->
-                ( Idle (Just ( msgLink, summary ))
-                , Cmd.none
-                )
-
-            Nothing ->
-                ( Idle Nothing, Cmd.none )
-
-    else
-        ( model, Cmd.none )
 
 
 abandonTimeout : Msg -> Cmd Msg
