@@ -34,6 +34,12 @@ window.ContextCards = (function() {
     link.addEventListener("mouseout", function(event) {
       sendMouseEvent("leave", event);
     });
+    link.addEventListener("focus", function(event) {
+      sendMouseEvent("enter", event);
+    });
+    link.addEventListener("blur", function(event) {
+      sendMouseEvent("leave", event);
+    });
   }
 
   function sendMouseEvent(kind, event) {
