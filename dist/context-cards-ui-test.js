@@ -5056,32 +5056,37 @@ var author$project$Card$view = F4(
 	function (events, link, maybeSummary, dismissed) {
 		if (maybeSummary.$ === 'Just') {
 			var summary = maybeSummary.a;
+			var eventAttrs = dismissed ? _List_Nil : _List_fromArray(
+				[
+					elm$html$Html$Events$onMouseEnter(
+					events.mouseEnter(link)),
+					elm$html$Html$Events$onMouseLeave(
+					events.mouseLeave(link))
+				]);
 			var dimensions = A3(author$project$Card$getDimensions, link.rect, link.viewport, summary);
 			return A2(
 				elm$html$Html$div,
-				_List_fromArray(
-					[
-						elm$html$Html$Attributes$classList(
-						_List_fromArray(
-							[
-								_Utils_Tuple2('ContextCard', true),
-								_Utils_Tuple2('ContextCardDismissed', dismissed)
-							])),
-						elm$html$Html$Attributes$dir(
-						author$project$Card$dirToString(summary.dir)),
-						A2(
-						elm$html$Html$Attributes$style,
-						'top',
-						author$project$Card$px(dimensions.top)),
-						A2(
-						elm$html$Html$Attributes$style,
-						'left',
-						author$project$Card$px(dimensions.left)),
-						elm$html$Html$Events$onMouseEnter(
-						events.mouseEnter(link)),
-						elm$html$Html$Events$onMouseLeave(
-						events.mouseLeave(link))
-					]),
+				_Utils_ap(
+					_List_fromArray(
+						[
+							elm$html$Html$Attributes$classList(
+							_List_fromArray(
+								[
+									_Utils_Tuple2('ContextCard', true),
+									_Utils_Tuple2('ContextCardDismissed', dismissed)
+								])),
+							elm$html$Html$Attributes$dir(
+							author$project$Card$dirToString(summary.dir)),
+							A2(
+							elm$html$Html$Attributes$style,
+							'top',
+							author$project$Card$px(dimensions.top)),
+							A2(
+							elm$html$Html$Attributes$style,
+							'left',
+							author$project$Card$px(dimensions.left))
+						]),
+					eventAttrs),
 				_List_fromArray(
 					[
 						A4(elm$html$Html$Lazy$lazy3, author$project$Card$viewSummary, link, dimensions, summary)
