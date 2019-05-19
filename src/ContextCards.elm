@@ -59,9 +59,6 @@ init () =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case ( model, msg ) of
-        ( _, LinkEnter link ) ->
-            ( Active link ActiveLink Nothing, fetchTimeout link )
-
         ( Active currentLink ActiveLink Nothing, Fetch link ) ->
             if currentLink.domElement == link.domElement then
                 ( model
@@ -111,25 +108,13 @@ update msg model =
                 ( model, Cmd.none )
 
         ( Active currentLink LeavingLink summary, LinkLeaveTimeout link ) ->
-            if currentLink.domElement == link.domElement then
-                idle link summary
+            idle currentLink link summary model
 
-            else
-                ( model, Cmd.none )
+        ( Active currentLink LeavingLink summary, LinkEnter link ) ->
+            activePreviewIfCurrentLink currentLink link summary model
 
         ( Active currentLink LeavingLink summary, PreviewEnter link ) ->
-            if currentLink.domElement == link.domElement then
-                ( Active link ActivePreview summary, Cmd.none )
-
-            else
-                ( model, Cmd.none )
-
-        ( Active currentLink LeavingPreview summary, PreviewEnter link ) ->
-            if currentLink.domElement == link.domElement then
-                ( Active link ActivePreview summary, Cmd.none )
-
-            else
-                ( model, Cmd.none )
+            activePreviewIfCurrentLink currentLink link summary model
 
         ( Active currentLink ActivePreview summary, PreviewLeave link ) ->
             if currentLink.domElement == link.domElement then
@@ -139,32 +124,50 @@ update msg model =
                 ( model, Cmd.none )
 
         ( Active currentLink LeavingPreview summary, PreviewLeaveTimeout link ) ->
-            if currentLink.domElement == link.domElement then
-                idle link summary
+            idle currentLink link summary model
 
-            else
-                ( model, Cmd.none )
+        ( Active currentLink LeavingPreview summary, PreviewEnter link ) ->
+            activePreviewIfCurrentLink currentLink link summary model
+
+        ( Active currentLink LeavingPreview summary, LinkEnter link ) ->
+            activePreviewIfCurrentLink currentLink link summary model
+
+        ( _, LinkEnter link ) ->
+            ( Active link ActiveLink Nothing, fetchTimeout link )
 
         ( _, _ ) ->
             ( model, Cmd.none )
 
 
-idle : Link -> Maybe Summary -> ( Model, Cmd Msg )
-idle link maybeSummary =
-    case maybeSummary of
-        Just summary ->
-            ( Idle (Just ( link, summary ))
-              -- , removeIdleLastPreviewTimeout
-            , Cmd.none
-            )
+activePreviewIfCurrentLink : Link -> Link -> Maybe Summary -> Model -> ( Model, Cmd Msg )
+activePreviewIfCurrentLink currentLink msgLink summary model =
+    if currentLink.domElement == msgLink.domElement then
+        ( Active msgLink ActivePreview summary, Cmd.none )
 
-        Nothing ->
-            ( Idle Nothing, Cmd.none )
+    else
+        ( model, Cmd.none )
+
+
+idle : Link -> Link -> Maybe Summary -> Model -> ( Model, Cmd Msg )
+idle currentLink msgLink maybeSummary model =
+    if currentLink.domElement == msgLink.domElement then
+        case maybeSummary of
+            Just summary ->
+                ( Idle (Just ( msgLink, summary ))
+                , Cmd.none
+                )
+
+            Nothing ->
+                ( Idle Nothing, Cmd.none )
+
+    else
+        ( model, Cmd.none )
 
 
 abandonTimeout : Msg -> Cmd Msg
 abandonTimeout msg =
-    Process.sleep 300 |> Task.perform (\() -> msg)
+    Process.sleep 300
+        |> Task.perform (\() -> msg)
 
 
 fetchTimeout : Link -> Cmd Msg
