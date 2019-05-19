@@ -21,7 +21,14 @@ main =
     Browser.element
         { init = init
         , subscriptions = subscriptions
-        , update = update
+        , update =
+            \msg model ->
+                -- let
+                --     _ =
+                --         Debug.log "msg" msg
+                -- in
+                -- Debug.log "result" <|
+                update msg model
         , view = view
         }
 
