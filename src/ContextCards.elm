@@ -32,19 +32,14 @@ type Model
 
 
 type InteractionStatus
-    = ActiveLink
-    | LeavingLink
-    | ActivePreview
+    = OnPreview
     | LeavingPreview
 
 
 type Msg
-    = LinkEnter Link
-    | LinkLeave Link
-    | LinkLeaveTimeout Link
-    | PreviewEnter Link
-    | PreviewLeave Link
-    | PreviewLeaveTimeout Link
+    = HoverIn Link
+    | HoverOutStart Link
+    | HoverOutEnd Link
     | Fetch Link
     | SummaryResponse Link (Result Http.Error Summary)
 
@@ -59,7 +54,7 @@ init () =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case ( model, msg ) of
-        ( Active currentLink ActiveLink Nothing, Fetch link ) ->
+        ( Active currentLink OnPreview Nothing, Fetch link ) ->
             if currentLink.domElement == link.domElement then
                 ( model
                 , Http.send (SummaryResponse link) (getSummary link.lang link.title)
@@ -77,63 +72,26 @@ update msg model =
                         )
 
                     Err err ->
-                        let
-                            strErr =
-                                case err of
-                                    BadUrl str ->
-                                        "Bad URL: " ++ str
-
-                                    Timeout ->
-                                        "Request timed out"
-
-                                    NetworkError ->
-                                        "Network error"
-
-                                    BadStatus res ->
-                                        "Status error: " ++ String.fromInt res.status.code ++ " - " ++ res.status.message
-
-                                    BadPayload errMsg res ->
-                                        "Payload error:\n" ++ errMsg
-                        in
-                        ( Idle Nothing, log ("Request failed\n" ++ strErr) )
+                        ( Idle Nothing, log ("Request failed\n" ++ requestErrorToString err) )
 
             else
                 ( model, Cmd.none )
 
-        ( Active currentLink ActiveLink summary, LinkLeave link ) ->
+        ( Active currentLink OnPreview summary, HoverOutStart link ) ->
             if currentLink.domElement == link.domElement then
-                ( Active link LeavingLink summary, abandonTimeout (LinkLeaveTimeout link) )
+                ( Active link LeavingPreview summary, abandonTimeout (HoverOutEnd link) )
 
             else
                 ( model, Cmd.none )
 
-        ( Active currentLink LeavingLink summary, LinkLeaveTimeout link ) ->
+        ( Active currentLink LeavingPreview summary, HoverOutEnd link ) ->
             idle currentLink link summary model
 
-        ( Active currentLink LeavingLink summary, LinkEnter link ) ->
+        ( Active currentLink LeavingPreview summary, HoverIn link ) ->
             activePreviewIfCurrentLink currentLink link summary model
 
-        ( Active currentLink LeavingLink summary, PreviewEnter link ) ->
-            activePreviewIfCurrentLink currentLink link summary model
-
-        ( Active currentLink ActivePreview summary, PreviewLeave link ) ->
-            if currentLink.domElement == link.domElement then
-                ( Active link LeavingPreview summary, abandonTimeout (PreviewLeaveTimeout link) )
-
-            else
-                ( model, Cmd.none )
-
-        ( Active currentLink LeavingPreview summary, PreviewLeaveTimeout link ) ->
-            idle currentLink link summary model
-
-        ( Active currentLink LeavingPreview summary, PreviewEnter link ) ->
-            activePreviewIfCurrentLink currentLink link summary model
-
-        ( Active currentLink LeavingPreview summary, LinkEnter link ) ->
-            activePreviewIfCurrentLink currentLink link summary model
-
-        ( _, LinkEnter link ) ->
-            ( Active link ActiveLink Nothing, fetchTimeout link )
+        ( _, HoverIn link ) ->
+            ( Active link OnPreview Nothing, fetchTimeout link )
 
         ( _, _ ) ->
             ( model, Cmd.none )
@@ -142,7 +100,7 @@ update msg model =
 activePreviewIfCurrentLink : Link -> Link -> Maybe Summary -> Model -> ( Model, Cmd Msg )
 activePreviewIfCurrentLink currentLink msgLink summary model =
     if currentLink.domElement == msgLink.domElement then
-        ( Active msgLink ActivePreview summary, Cmd.none )
+        ( Active msgLink OnPreview summary, Cmd.none )
 
     else
         ( model, Cmd.none )
@@ -177,8 +135,8 @@ fetchTimeout link =
 
 cardEvents : Card.Events Msg
 cardEvents =
-    { mouseEnter = PreviewEnter
-    , mouseLeave = PreviewLeave
+    { mouseEnter = HoverIn
+    , mouseLeave = HoverOutStart
     }
 
 
@@ -234,10 +192,10 @@ mouseEventJsonToMouseEvent json =
             }
     in
     if json.kind == "enter" then
-        LinkEnter link
+        HoverIn link
 
     else
-        LinkLeave link
+        HoverOutStart link
 
 
 port mouseEvent : (MouseEventJson -> msg) -> Sub msg
@@ -261,3 +219,22 @@ url lang title =
 getSummary : String -> String -> Http.Request Summary
 getSummary lang title =
     Http.get (url lang title) decodeSummary
+
+
+requestErrorToString : Http.Error -> String
+requestErrorToString err =
+    case err of
+        BadUrl str ->
+            "Bad URL: " ++ str
+
+        Timeout ->
+            "Request timed out"
+
+        NetworkError ->
+            "Network error"
+
+        BadStatus res ->
+            "Status error: " ++ String.fromInt res.status.code ++ " - " ++ res.status.message
+
+        BadPayload errMsg res ->
+            "Payload error:\n" ++ errMsg
