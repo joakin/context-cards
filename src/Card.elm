@@ -229,12 +229,6 @@ getDimensions linkRect { viewport } ({ thumbnail } as summary) =
             else
                 ( thumbnailMaxSize, thumbnailOtherDimension )
 
-        topPosition =
-            linkRect.top + viewport.y + linkRect.height
-
-        leftPosition =
-            linkRect.left + viewport.x
-
         constrainedSize =
             if isHorizontalPreview then
                 { styleAttr = "max-height", value = horizontalPreviewHeight }
@@ -253,12 +247,15 @@ getDimensions linkRect { viewport } ({ thumbnail } as summary) =
             else
                 verticalPreviewWidth
 
+        verticalExtractMaxHeight =
+            190
+
         extractMaxHeight =
             if isHorizontalPreview then
                 "100%"
 
             else
-                px 190
+                px verticalExtractMaxHeight
 
         extractOrder =
             if isHorizontalPreview then
@@ -266,6 +263,25 @@ getDimensions linkRect { viewport } ({ thumbnail } as summary) =
 
             else
                 1
+
+        ( maxWidth, maxHeight ) =
+            if isHorizontalPreview then
+                ( extractWidth + thumbnailWidth, horizontalPreviewHeight )
+
+            else
+                ( verticalPreviewWidth, verticalExtractMaxHeight + thumbnailHeight )
+
+        ( topPosition, leftPosition ) =
+            case summary.dir of
+                LTR ->
+                    ( linkRect.top + viewport.y + linkRect.height
+                    , linkRect.left + viewport.x
+                    )
+
+                RTL ->
+                    ( linkRect.top + viewport.y + linkRect.height
+                    , linkRect.left + viewport.x - (maxWidth - linkRect.width)
+                    )
     in
     { kind = kind
     , top = topPosition
