@@ -1,6 +1,6 @@
 {
   "name": "context-cards",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "",
   "main": "dist/context-cards.js",
   "scripts": {
