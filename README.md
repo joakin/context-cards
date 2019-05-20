@@ -3,9 +3,7 @@
 Get Wikipedia page previews on any page!
 
 <p align="center">
-  <a target="_blank" rel="noopener noreferrer" href="/joakin/context-cards/blob/master/popup.png">
-    <img src="/joakin/context-cards/raw/master/popup.png" alt="English Wikipedia Vorticism preview" style="max-width:100%;" width="754" height="568">
-  </a>
+  <img src="./popup.png" alt="English Wikipedia Vorticism preview" style="max-width:100%;" width="754" height="568">
 </p>
 
 See some live examples at <https://joakin.github.io/context-cards>, or check our
