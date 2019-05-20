@@ -3,7 +3,7 @@ port module ContextCards exposing (main)
 import Browser
 import Browser.Dom exposing (Viewport)
 import Card exposing (ClientRect, Link)
-import Data exposing (Summary, decodeSummary)
+import Data exposing (Dir(..), Summary, decodeSummary, dirFromString)
 import Html exposing (Attribute, Html, div, img, node, p, text)
 import Html.Attributes exposing (attribute, class, classList, id, src, style)
 import Html.Events exposing (onMouseEnter, onMouseLeave)
@@ -176,6 +176,7 @@ type alias MouseEventJson =
     , link : D.Value
     , rect : ClientRect
     , viewport : Viewport
+    , contentDir : String
     }
 
 
@@ -188,6 +189,7 @@ mouseEventJsonToMouseEvent json =
             , domElement = json.link
             , rect = json.rect
             , viewport = json.viewport
+            , contentDir = dirFromString json.contentDir |> Maybe.withDefault LTR
             }
     in
     if json.kind == "enter" then

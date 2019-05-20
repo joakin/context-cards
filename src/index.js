@@ -44,13 +44,19 @@ window.ContextCards = (function() {
 
   function sendMouseEvent(kind, event) {
     var link = event.target;
+    var closestDir = link.closest("[dir]");
     var data = {
       kind: kind,
       link: link,
       title: link.dataset.wikiTitle,
       lang: link.dataset.wikiLang,
       rect: link.getBoundingClientRect(),
-      viewport: getViewport()
+      viewport: getViewport(),
+      contentDir: link.dir
+        ? link.dir
+        : closestDir
+        ? closestDir.dir.toLowerCase()
+        : "ltr"
     };
     contextCardsApp.ports.mouseEvent.send(data);
   }

@@ -1,4 +1,13 @@
-module Data exposing (Dir(..), Summary, Thumbnail, decodeDir, decodeSummary, decodeThumbnail)
+module Data exposing
+    ( Dir(..)
+    , Summary
+    , Thumbnail
+    , decodeDir
+    , decodeSummary
+    , decodeThumbnail
+    , dirFromString
+    , dirToString
+    )
 
 import Json.Decode as D exposing (Decoder)
 
@@ -49,13 +58,30 @@ decodeDir =
     D.string
         |> D.andThen
             (\str ->
-                case str of
-                    "ltr" ->
-                        D.succeed LTR
-
-                    "rtl" ->
-                        D.succeed RTL
-
-                    _ ->
-                        D.fail ("Unknown language direction: " ++ str)
+                dirFromString str
+                    |> Maybe.map D.succeed
+                    |> Maybe.withDefault (D.fail ("Unknown language direction: " ++ str))
             )
+
+
+dirFromString : String -> Maybe Dir
+dirFromString dir =
+    case dir of
+        "ltr" ->
+            Just LTR
+
+        "rtl" ->
+            Just RTL
+
+        _ ->
+            Nothing
+
+
+dirToString : Dir -> String
+dirToString dir =
+    case dir of
+        LTR ->
+            "ltr"
+
+        RTL ->
+            "rtl"

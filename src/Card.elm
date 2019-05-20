@@ -1,7 +1,7 @@
 module Card exposing (ClientRect, Events, Link, styles, view)
 
 import Browser.Dom exposing (Viewport)
-import Data exposing (Dir(..), Summary, Thumbnail)
+import Data exposing (Dir(..), Summary, Thumbnail, dirToString)
 import Html exposing (..)
 import Html.Attributes exposing (attribute, class, classList, dir, href, id, src, style, target)
 import Html.Events exposing (onMouseEnter, onMouseLeave)
@@ -16,6 +16,7 @@ type alias Link =
     , domElement : D.Value
     , rect : ClientRect
     , viewport : Viewport
+    , contentDir : Dir
     }
 
 
@@ -59,7 +60,7 @@ view events link maybeSummary dismissed =
         Just summary ->
             let
                 dimensions =
-                    getDimensions link.rect link.viewport summary
+                    getDimensions link summary
 
                 eventAttrs =
                     if dismissed then
@@ -176,9 +177,15 @@ px n =
     String.fromFloat n ++ "px"
 
 
-getDimensions : ClientRect -> Viewport -> Summary -> Dimensions
-getDimensions linkRect { viewport } ({ thumbnail } as summary) =
+getDimensions : Link -> Summary -> Dimensions
+getDimensions link ({ thumbnail } as summary) =
     let
+        rect =
+            link.rect
+
+        viewport =
+            link.viewport.viewport
+
         isHorizontalPreview =
             thumbnail
                 |> Maybe.map (\t -> t.height > t.width)
@@ -272,14 +279,14 @@ getDimensions linkRect { viewport } ({ thumbnail } as summary) =
                 ( verticalPreviewWidth, verticalExtractMaxHeight + thumbnailHeight )
 
         ( topPosition, leftPosition ) =
-            ( linkRect.top + viewport.y + linkRect.height
-            , case summary.dir of
+            ( rect.top + viewport.y + rect.height
+            , case link.contentDir of
                 LTR ->
-                    min (linkRect.left + viewport.x)
+                    min (rect.left + viewport.x)
                         (viewport.x + viewport.width - maxWidth)
 
                 RTL ->
-                    max (linkRect.left + viewport.x - (maxWidth - linkRect.width))
+                    max (rect.left + viewport.x - (maxWidth - rect.width))
                         viewport.x
             )
     in
@@ -345,15 +352,6 @@ viewSummary link dimensions ({ thumbnail } as summary) =
             Nothing ->
                 text ""
         ]
-
-
-dirToString dir =
-    case dir of
-        LTR ->
-            "ltr"
-
-        RTL ->
-            "rtl"
 
 
 viewThumbnail : String -> Dimensions -> Thumbnail -> Html msg
