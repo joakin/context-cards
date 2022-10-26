@@ -3,11 +3,10 @@ module Card exposing (ClientRect, Events, Link, styles, view)
 import Browser.Dom exposing (Viewport)
 import Data exposing (Dir(..), Summary, Thumbnail, dirToString)
 import Html exposing (..)
-import Html.Attributes exposing (attribute, class, classList, dir, href, id, src, style, target)
+import Html.Attributes exposing (attribute, class, classList, dir, href, src, style, target)
 import Html.Events exposing (onMouseEnter, onMouseLeave)
-import Html.Keyed as Keyed
 import Html.Lazy as L
-import Json.Decode as D exposing (Decoder)
+import Json.Decode as D
 
 
 type alias Link =
@@ -178,7 +177,7 @@ px n =
 
 
 getDimensions : Link -> Summary -> Dimensions
-getDimensions link ({ thumbnail } as summary) =
+getDimensions link { thumbnail } =
     let
         rect =
             link.rect
@@ -206,7 +205,7 @@ getDimensions link ({ thumbnail } as summary) =
 
         hasThumbnail =
             case thumbnail of
-                Just thumb ->
+                Just _ ->
                     True
 
                 Nothing ->
@@ -271,7 +270,7 @@ getDimensions link ({ thumbnail } as summary) =
             else
                 1
 
-        ( maxWidth, maxHeight ) =
+        ( maxWidth, _ ) =
             if isHorizontalPreview then
                 ( extractWidth + thumbnailWidth, horizontalPreviewHeight )
 

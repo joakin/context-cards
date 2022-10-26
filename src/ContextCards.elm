@@ -4,14 +4,12 @@ import Browser
 import Browser.Dom exposing (Viewport)
 import Card exposing (ClientRect, Link)
 import Data exposing (Dir(..), Summary, decodeSummary, dirFromString)
-import Html exposing (Attribute, Html, div, img, node, p, text)
-import Html.Attributes exposing (attribute, class, classList, id, src, style)
-import Html.Events exposing (onMouseEnter, onMouseLeave)
+import Html exposing (Html, node, text)
+import Html.Attributes exposing (id)
 import Html.Keyed as Keyed
 import Html.Lazy as L
 import Http exposing (Error(..))
-import Json.Decode as D exposing (Decoder)
-import Json.Encode as E
+import Json.Decode as D
 import Process
 import Task
 
@@ -100,7 +98,7 @@ update msg model =
             else
                 ( model, Cmd.none )
 
-        ( Active currentLink interaction summary, HoverIn link ) ->
+        ( Active currentLink _ summary, HoverIn link ) ->
             if currentLink.domElement == link.domElement then
                 ( Active currentLink OnPreview summary, Cmd.none )
 
@@ -151,21 +149,21 @@ view model =
     Keyed.node "div"
         [ id "ContextCardsContainer" ]
     <|
-        [ ( "styles", node "style" [] [ text Card.styles ] ) ]
-            ++ (case model of
+        ( "styles", node "style" [] [ text Card.styles ] )
+            :: (case model of
                     Idle Nothing ->
                         []
 
                     Idle (Just ( lastLink, lastSummary )) ->
                         viewLink lastLink (Just lastSummary) True
 
-                    Active link interactionStatus summary ->
+                    Active link _ summary ->
                         viewLink link summary False
                )
 
 
 subscriptions : Model -> Sub Msg
-subscriptions model =
+subscriptions _ =
     mouseEvent mouseEventJsonToMouseEvent
 
 
@@ -237,5 +235,5 @@ requestErrorToString err =
         BadStatus res ->
             "Status error: " ++ String.fromInt res.status.code ++ " - " ++ res.status.message
 
-        BadPayload errMsg res ->
+        BadPayload errMsg _ ->
             "Payload error:\n" ++ errMsg
